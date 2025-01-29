@@ -11,8 +11,10 @@ export const PopUpInput = () => {
         getFromUser, 
         collectValues, 
         setValueToCollect,
-        mode,
-        setMode
+        // mode,
+        // setMode,
+        modeState,
+        modeDispatcher
     } = useContext(Context)
 
     const notify = (toastMessage) => toast(toastMessage);
@@ -26,7 +28,7 @@ export const PopUpInput = () => {
         }
         await notify(collectValues?.title + ' ' + "added")
         await setValueToInputCard(false)
-        await setMode('view')
+        await modeDispatcher('view')
     }
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -58,7 +60,7 @@ export const PopUpInput = () => {
                     <div className="col-12  my-3 d-flex justify-content-center">
 
                         <Button onClick={handleClick} className="btn btn-success px-4" buttonContent={"submit"} />
-                        {mode === "edit" ?
+                        {modeState === "edit" ?
                             <>
                                 <Button onClick={handleProgressClick} className="btn btn-info mx-2 px-4" buttonContent={"Progress"} />
                                 <Button onClick={handleCompeletedClick} className="btn btn-warning px-4" buttonContent={"Compeleted"} />

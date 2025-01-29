@@ -8,9 +8,10 @@ const ShowTasks = () => {
         setValueToInputCard,
         setValueToCollect,
         setUserInput,
-        setMode } = useContext(Context)
+        modeDispatcher
+     } = useContext(Context)
     const handleEditClick = (index) => {
-        setMode('edit')
+        modeDispatcher('edit')
         setValueToInputCard(true)
         const selectedTask = getFromUser.find((_, TaskObjsPosition) => (TaskObjsPosition === index))
         setValueToCollect({ ["title"]: selectedTask.title, ["id"]: index })
