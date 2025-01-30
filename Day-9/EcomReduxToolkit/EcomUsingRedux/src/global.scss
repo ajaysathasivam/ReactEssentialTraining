@@ -1,0 +1,10 @@
+@import "../node_modules/bootstrap/dist/css/bootstrap.css";
+.card-continer{
+    width:9rem !important;
+}
+.truncate-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3 !important; /* Number of lines you want to show */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
