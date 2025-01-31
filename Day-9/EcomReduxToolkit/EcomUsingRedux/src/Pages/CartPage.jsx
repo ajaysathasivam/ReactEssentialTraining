@@ -1,21 +1,42 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { updateQuantityInc, updateQuantityDec } from "../store/Cart/cartSlice"
+import { updateQuantityInc, updateQuantityDec, updateQuantityReset, updateTotal, updateCartQty } from "../store/Cart/cartSlice"
 const CartPage = () => {
-    const selectedCartCount = useSelector((state) => state.cart.value)
-    const { cartItems } = useSelector((state) => state.cart)
+    const { cartItems,cart_total } = useSelector((state) => state.cart)
     const { quantity } = useSelector((state) => state.cart)
-    const{total} = useSelector((state)=>state.cart)
+    const { total } = useSelector((state) => state.cart)
     const dispatch = useDispatch()
-    const handleQuantity =(type)=>{
-       type === "inc"?dispatch(updateQuantityInc()):dispatch(updateQuantityDec())
-       dispatch(total())
+    // bug code
+    // const handleQuantity = (type, id) => {
+    //     const getId = cartItems.findIndex((obj) => obj.id === id)
+    //     console.log(getId)
+    //     if (id === getId) {
+    //         if (type === "inc") {
+    //             dispatch(updateQuantityInc())
+    //             const obj = cartItems[id]
+    //             const pre = { ...obj, ["quantity"]: quantity + 1 }
+    //             console.log(pre)
+    //         }
+    //         else {
+    //             dispatch(updateQuantityDec())
+    //             console.log(total, quantity)
+    //         }
+    //     }
+    //     dispatch(updateQuantityReset())
+    // }
+    const handleUpdateQty = (type, id, qty) => {
+        if (type === 'inc') {
+            dispatch(updateCartQty({ id, qty: qty + 1,type }))
+        }
+        if (type === 'dec') {
+            dispatch(updateCartQty({ id, qty: qty - 1 ,type}))
+        }
     }
     return (
         <div>
             <div className="container">
                 <div className="row">
                     <div className="col mb-5">
-                        <p className='h2 text-center'>Your cart ({`${selectedCartCount} Items`})</p>
+                        <p className='h2 text-center'>Your cart ({`${cartItems.length} Items`})</p>
                     </div>
                 </div>
                 {/* Heading */}
@@ -28,6 +49,7 @@ const CartPage = () => {
                 {/* Body */}
                 {cartItems.map((obj, index) => (
                     <>
+                        {console.log(dispatch(updateTotal()))}
                         <div className="row border-bottom pb-2">
                             <div className="col-6">
                                 <div className="row align-items-center">
@@ -42,24 +64,18 @@ const CartPage = () => {
                             <div className="col">
                                 ${obj.price}</div>
                             <div className="col">
-                                <button onClick={()=>handleQuantity("inc")}>+</button>
-                                {quantity}
-                                <button onClick={()=>handleQuantity("dec")}>-</button>
+                                <button onClick={() => handleUpdateQty("dec", obj.id, obj.quantity)}>-</button>
+                                {obj.quantity}
+                                <button onClick={() => handleUpdateQty("inc", obj.id, obj.quantity)}>+</button>
                             </div>
-                            <div className="col">{total}</div>
+                            <div className="col">{obj.sub_total }</div>
                         </div>
                     </>
                 ))}
                 {/* Total  */}
                 <div className="row">
                     <div className="col offset-7 border-bottom">Subtotal</div>
-                    <div className="col border-bottom">$000000</div>
-                    <div className="col offset-7 border-bottom">Sales Tax</div>
-                    <div className="col border-bottom">$000000</div>
-                    <div className="col offset-7 border-bottom">Cuppon Code</div>
-                    <div className="col border-bottom">$000000</div>
-                    <div className="col offset-7 border-bottom">Grand Total</div>
-                    <div className="col border-bottom">$000000</div>
+                    <div className="col border-bottom">{cart_total.toFixed(2)}</div>
                 </div>
             </div>
         </div>
