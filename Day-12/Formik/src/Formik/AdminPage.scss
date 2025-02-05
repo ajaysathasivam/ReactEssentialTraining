@@ -1,0 +1,17 @@
+button{
+    padding: 0.5rem 1rem;
+    margin: 0.3rem;
+}
+.userDetails-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid tomato;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px 2px rgba(163,163,163,0.77);
+    // padding: auto 1rem;
+    
+}
+p{
+    padding:0 1rem;
+}

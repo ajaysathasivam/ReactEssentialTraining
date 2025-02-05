@@ -1,0 +1,13 @@
+{
+  "users": [
+    {
+      "username": "adimin@1234.com",
+      "id": "6fd8",
+      "admin": "true"
+    },
+    {
+      "username": "user3",
+      "id": "c1d8"
+    }
+  ]
+}

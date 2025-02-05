@@ -1,0 +1,12 @@
+.container{
+    color: red;
+    &__Sub-One{
+        color: orange;
+        &Two{
+            color: green;
+        }
+    }
+    &__SibOne{
+            color: black;
+    }
+}

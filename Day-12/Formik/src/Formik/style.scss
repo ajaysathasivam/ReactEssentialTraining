@@ -1,0 +1,12 @@
+.error-username,
+.error-password {
+    color: red;
+}
+
+.error-username+input {
+    border: 1px solid red;
+}
+
+.error-password+input {
+    border: 1px solid red;
+}

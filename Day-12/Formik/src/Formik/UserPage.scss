@@ -1,0 +1,12 @@
+.welcome{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.welcome p{
+    font-size: calc(1.5rem);
+    font-weight: 800;
+}
+.container{
+    margin: 1rem 2rem;
+}
