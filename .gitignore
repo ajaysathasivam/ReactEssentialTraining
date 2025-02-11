@@ -10,14 +10,32 @@ lerna-debug.log*
 Day7/node_modules
 Day-8/node_modules
 Day-9/node_modules
+Day-10/node_modules
+Day-11/node_modules
+Day-12/node_modules
+Day-14/node_modules
+Day-18/node_modules
+Project-1/node_modules
 
 Day7/dist
 Day-8/dist
 Day-9/dist
+Day-10/dist
+Day-11/dist
+Day-12/dist
+Day-14/dist
+Day-18/dist
+Project-1/dist
 
 Day7/dist-ssr
 Day-8/dist-ssr
 Day-9/dist-ssr
+Day-10/dist-ssr
+Day-11/dist-ssr
+Day-12/dist-ssr
+Day-14/dist-ssr
+Day-18/dist-ssr
+Project-1/dist-ssr
 *.local
 
 # Editor directories and files

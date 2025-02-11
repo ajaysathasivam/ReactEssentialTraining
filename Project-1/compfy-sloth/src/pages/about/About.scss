@@ -1,0 +1,14 @@
+.about-heading{
+    position: relative;
+}
+.about-heading::before{
+    content: '';
+    width: 20%;
+    height: 5px;
+    background-color: var(--clr-primary-4);
+    position: absolute;
+    top:0px;
+    left: 0px;
+    top: 5rem;    
+
+}

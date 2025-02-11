@@ -1,0 +1,20 @@
+
+.pointer {
+    cursor: pointer;
+}
+
+.bread-crum{
+    background-color: var(--clr-primary-10);
+    div{
+        .bread-root{
+         color: var(--clr-primary-4);   
+         @extend .pointer;
+            
+        }
+         .bread-child{
+            @extend .pointer;
+            color: var(--clr-primary-1);
+        }
+        
+    }
+}

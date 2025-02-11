@@ -1,0 +1,23 @@
+@import "../node_modules/bootstrap/dist/css/bootstrap.css";
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.navPage:hover {
+    background-color: rgba(128, 0, 128, 0.377);
+    border-radius: 1em;
+    color: white;
+    border: 1px gainsboro;
+}
+.nav-sub :hover{
+    background-color: gainsboro;
+    padding: 0 3px;
+    border-radius: 4px;
+}
+#root{
+height: 100vh;
+
+}

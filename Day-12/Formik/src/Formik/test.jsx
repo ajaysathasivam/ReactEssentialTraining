@@ -1,6 +1,4 @@
 import "./test.scss"
-import React from 'react'
-
 const Test = () => {
   return (
     <div className="container">

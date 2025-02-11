@@ -1,0 +1,18 @@
+.section-featured{
+    background-color: var(--clr-grey-10);
+}
+.featured-title{
+    position: relative;
+}
+.featured-title::before{
+    content: '';
+    width: 100px;
+    height: 5px;
+    background-color: var(--clr-primary-4);
+    position: absolute;
+    top:2.8rem;
+    left: 45%;
+}
+.featured-card{
+    padding: 0 !important;
+}

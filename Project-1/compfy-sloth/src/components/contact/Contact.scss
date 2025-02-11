@@ -1,0 +1,17 @@
+.inputBtn{
+    border: 2px solid var(--clr-black) !important;
+}
+.section-contact{
+    input{
+        @extend .inputBtn;
+        border-radius: 5px 0px 0px 5px;
+    };
+    button{
+        @extend .inputBtn;
+        border-radius: 0px 5px 5px 0px !important;
+        background-color: var(--clr-primary-3);
+       
+    } 
+
+    
+};

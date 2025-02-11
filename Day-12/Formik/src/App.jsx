@@ -4,8 +4,8 @@ import Test from "./Formik/test"
 const App = () => {
   return (
    <>
-    {/* <LoginPage/> */}
-    <Test/>
+    <LoginPage/>
+    {/* <Test/> */}
    </>
   )
 }
