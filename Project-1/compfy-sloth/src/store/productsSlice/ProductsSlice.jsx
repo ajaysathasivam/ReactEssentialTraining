@@ -7,6 +7,7 @@ export const ProductsSlice = createSlice({
     initialState,
     reducers: {
         setValue:(state,action)=>{
+            console.log(action.payload)
             state.value = action.payload
         }
     }

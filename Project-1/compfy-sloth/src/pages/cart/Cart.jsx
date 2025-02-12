@@ -1,8 +1,11 @@
 import React from 'react'
+import Section from '../../components/layout/Section'
 
 const Cart = () => {
   return (
-    <div>Cart</div>
+   <Section>
+    h1
+   </Section>
   )
 }
 

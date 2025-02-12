@@ -1,6 +1,5 @@
 import React from "react";
 import Button from "../button/Button";
-import navigate from "../../utils/navigate";
 import { useNavigate } from "react-router-dom";
 import "../hero/Hero.scss";
 import Section from "../layout/Section";

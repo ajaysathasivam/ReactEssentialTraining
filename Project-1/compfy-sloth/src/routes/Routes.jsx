@@ -6,6 +6,8 @@ import Products from "../pages/product/Products";
 import Footer from "../components/footer/Footer";
 import Header from "../components/header/Header";
 import BreadCrums from "../components/breadcrums/BreadCrums";
+import Cart from "../pages/cart/Cart";
+import Poster from "../pages/poster/Poster";
 const RoutesCom = () => {
   return (
     <>
@@ -15,6 +17,7 @@ const RoutesCom = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/poster" element={<Poster/>}/> 
         </Routes>
         <Footer/>
       </BrowserRouter>
