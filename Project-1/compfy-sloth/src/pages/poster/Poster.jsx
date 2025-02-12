@@ -15,26 +15,36 @@ const Poster = () => {
           </div>
         </div>
         <div className="col-lg-6">
-          <p>titlte</p>
-          <p>rating </p>
-          <p>price</p>
+          <p>Wooden Table</p>
+          <p>rating (35 customer reviews) </p>
+          <p>$2,349.99</p>
           <p>
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Blanditiis
             nobis deleniti quidem laboriosam labore ipsum ipsa odit maiores
             mollitia repellat.
           </p>
           <p>
-            <ul>
-              <li>available</li>
-              <li>skd</li>
-              <li>brand</li>
-            </ul>
+            <div className="row align-items-center">
+              <div className="col-2">Available:</div>
+              <div className="col">in Stock</div>
+            </div>
           </p>
+          <div className="col">
+            <hr className="w-100" />
+            <div className="row align-items-center">
+              <div className="col-2">Color:</div>
+              <div className="col"><button className="rounded-circle border-0" style={{ backgroundColor: "red", width: "20px", height: "20px" }}></button></div>
+            </div>
+
+            <div className="d-flex align-items-center">
+              <button className="btn">-</button>
+              <span>1</span>
+              <button className="btn">+</button></div>
+
+          </div>
+          <button className="btn">Add Cart</button>
         </div>
-        <div className="col-lg-6">
-            <hr />
-            incre + decre
-        </div>
+
       </div>
     </Section>
   );

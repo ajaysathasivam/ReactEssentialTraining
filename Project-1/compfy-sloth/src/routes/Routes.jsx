@@ -12,14 +12,15 @@ const RoutesCom = () => {
   return (
     <>
       <BrowserRouter>
-      <Header/>
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/poster" element={<Poster/>}/> 
+          <Route path="/poster" element={<Poster />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
-        <Footer/>
+        <Footer />
       </BrowserRouter>
     </>
   );
