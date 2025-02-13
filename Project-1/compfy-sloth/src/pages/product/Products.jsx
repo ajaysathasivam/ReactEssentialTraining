@@ -68,47 +68,47 @@ const Products = () => {
   useEffect(() => {
     switch (sortCompany) {
       case 1:
-        const filteredProductsByMarcos=data.filter((obj)=>obj.company == "marcos")
+        const filteredProductsByMarcos = data.filter((obj) => obj.company == "marcos")
         setProducts(filteredProductsByMarcos)
         setRecords(filteredProductsByMarcos.length)
         // console.log(filteredProductsByMarcos)
         break;
       case 2:
-        const filteredProductsByliddy=data.filter((obj)=>obj.company == "liddy")
+        const filteredProductsByliddy = data.filter((obj) => obj.company == "liddy")
         setProducts(filteredProductsByliddy)
         setRecords(filteredProductsByliddy.length)
         break;
 
       case 3:
-        const filteredProductsByikea=data.filter((obj)=>obj.company == "ikea")
+        const filteredProductsByikea = data.filter((obj) => obj.company == "ikea")
         setProducts(filteredProductsByikea)
         setRecords(filteredProductsByikea.length)
         break;
       case 4:
-        const filteredProductsBycaressa=data.filter((obj)=>obj.company == "caressa")
+        const filteredProductsBycaressa = data.filter((obj) => obj.company == "caressa")
         setProducts(filteredProductsBycaressa)
         setRecords(filteredProductsBycaressa.length)
         break;
-      
+
       default:
         setProducts(data);
     }
   }, [sortCompany]);
 
-  useEffect(()=>{
-    const filteredProductsByCatogories=data.filter((obj)=>obj.category == catogories)
+  useEffect(() => {
+    const filteredProductsByCatogories = data.filter((obj) => obj.category == catogories)
     setProducts(filteredProductsByCatogories)
-  },[catogories])
-  
-  const handleColor =(color)=>{
+  }, [catogories])
+
+  const handleColor = (color) => {
     const filteredProductsByColor = data.filter((obj) =>
       obj.colors.some((clr) => clr.toLowerCase() === color.toLowerCase())
     );
-  
+
     setProducts(filteredProductsByColor)
     setRecords(filteredProductsByColor.length)
   }
-  const handleClear=()=>{
+  const handleClear = () => {
     setProducts(data)
   }
   const handleChange = (e, type) => {
@@ -170,7 +170,7 @@ const Products = () => {
     }
   };
   const navigate = useNavigate()
- 
+
 
   return (
     <>
@@ -179,7 +179,7 @@ const Products = () => {
         <div className="row ">
           <div
             className="col-lg-3 filter-container position-sticky"
-            
+
           >
             <form onSubmit={formik.handleSubmit}>
               {filterData?.map((item) => (
@@ -193,10 +193,10 @@ const Products = () => {
                     className="border-0 input-search px-2 py-2 w-100 rounded"
                   />
                   <ul className="navbar-nav">
-                   <span className="chead-color my-2 text-capitalize fw-bold">{item.catogories.title}</span> 
-                   <span className="chead-color my-1 phead-color text-decoration-underline" style={{letterSpacing:"1.6px",fontSize:"0.8rem"}}>All</span> 
+                    <span className="chead-color my-2 text-capitalize fw-bold">{item.catogories.title}</span>
+                    <span className="chead-color my-1 phead-color text-decoration-underline" style={{ letterSpacing: "1.6px", fontSize: "0.8rem" }}>All</span>
                     {item.catogories.subCt.map((subCt) => (
-                      <li className="nav-item my-1 text-capitalize   phead-color pointer" style={{letterSpacing:"1.6px",fontSize:"0.9rem"}} onClick={()=>setCatogories(subCt)}>{subCt}</li>
+                      <li className="nav-item my-1 text-capitalize   phead-color pointer" style={{ letterSpacing: "1.6px", fontSize: "0.9rem" }} onClick={() => setCatogories(subCt)}>{subCt}</li>
                     ))}
                   </ul>
                   <div>
@@ -209,7 +209,7 @@ const Products = () => {
                     <div className="d-flex align-items-center my-4">
                       <span className="me-2 phead-color text-decoration-underline">All</span>
                       {item.color.colors.map((color) => (
-                        <span 
+                        <span
                           style={{
                             backgroundColor: color,
                             width: "20px",
@@ -247,8 +247,8 @@ const Products = () => {
                   </div>
                 </>
               ))}
-              <Button className="btn btn-danger my-2 mb-4  px-5" text={"clear fillter"} onClick={()=>{formik.handleReset,handleClear}}>
-                
+              <Button className="btn btn-danger my-2 mb-4  px-5" text={"clear fillter"} onClick={() => { formik.handleReset, handleClear }}>
+
               </Button>
             </form>
           </div>
@@ -295,7 +295,7 @@ const Products = () => {
                     <div className="">
                       <div
                         className={`${layout === "col-12" && "flow-column"}`}
-                        onClick={()=>navigate(`/poster/${product.id}`)}
+                        onClick={() => navigate(`/poster/${product.id}`)}
                       >
                         <div className="" style={{ height: "175px" }}>
                           <img
@@ -308,7 +308,7 @@ const Products = () => {
                         <div className="d-flex justify-content-between my-2">
                           <p className="chead-color text-capitalize">{product.name}</p>
                           <p className="chead primary">
-                            $<span className="ms-1">{(product.price/100).toFixed(2)}</span>
+                            $<span className="ms-1">{(product.price / 100).toFixed(2)}</span>
                           </p>
                         </div>
                       </div>

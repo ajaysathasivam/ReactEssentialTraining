@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import Section from "../../components/layout/Section";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "../../components/button/Button";
 import ImageCart from "../../components/imagecard/ImageCart";
+import { setCartValue } from "../../store/CartSlice/CartSlice";
 
 const Poster = () => {
   const { id } = useParams();
   const data = useSelector((state) => state.products.value);
-  const product = data.filter((obj) => obj.id === id);
+  const product = data?.filter((obj) => obj.id === id);
+  const [defaultColor, setDefault] = useState(product?.map((obj) => obj.colors[0]))
   const [productView, setProductView] = useState(product);
   const [image, setImage] = useState(product[0].image);
   const navigate = useNavigate();
-  const [count, setCount] = useState(1);
+  const [cartCount, setCount] = useState(1);
+  const dispatch = useDispatch()
   const handleInc = (type) => {
     switch (type) {
       case "inc":
@@ -29,11 +32,12 @@ const Poster = () => {
         setCount(1);
     }
   };
-  const handleAddCart = (item,id)=>{
-   localStorage.setItem("cart",count)
-   const cartItem = item
-   localStorage.setItem("cartItems",JSON.stringify(cartItem))
-   navigate(`/cart/${id}`)
+  const handleAddCart = (item, id) => {
+    console.log(item, defaultColor, cartCount
+    )
+    const newItem = { ...item, 'selectedColo': defaultColor, "cartItems": cartCount, "subTotal": Number(cartCount) * (Number(item.price) / 100).toFixed(2) }
+    dispatch(setCartValue(newItem))
+    navigate(`/cart`)
   }
   return (
     <Section>
@@ -127,14 +131,18 @@ const Poster = () => {
                     <span className="fw-bold chead-color">Color:</span>{" "}
                   </div>
                   <div className="col d-flex px-5">
-                    <button
-                      className="rounded-circle border-0"
-                      style={{
-                        backgroundColor: `${item?.color}`,
-                        width: "20px",
-                        height: "20px",
-                      }}
-                    ></button>
+
+                    {item?.colors?.map((color) => (
+                      <button
+                        className="rounded-circle border-0"
+                        style={{
+                          backgroundColor: `${color}`,
+                          width: "20px",
+                          height: "20px",
+                        }}
+                        onClick={() => setDefault(color)}
+                      >{defaultColor == color ? "1" : ''}</button>
+                    ))}
                   </div>
                 </div>
 
@@ -145,7 +153,7 @@ const Poster = () => {
                   >
                     -
                   </button>
-                  <span className="chead-color fw-bold fs-1">{count}</span>
+                  <span className="chead-color fw-bold fs-1">{cartCount}</span>
                   <button
                     className="btn chead-color fw-bold fs-4 px-3"
                     onClick={() => handleInc("inc")}
@@ -157,7 +165,7 @@ const Poster = () => {
               <Button
                 className={"bgprimary rounded border-0"}
                 text={"Add cart"}
-                onClick={()=>handleAddCart(item,item.id)}
+                onClick={() => handleAddCart(item)}
               />
             </div>
           </>

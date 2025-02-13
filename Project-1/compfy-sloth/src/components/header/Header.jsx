@@ -4,8 +4,8 @@ import Section from "../layout/Section";
 import "./Header.scss";
 
 const Header = () => {
-  console.log(localStorage.getItem("cart"))
-  const [cartCount, setCartCount] = localStorage.getItem("cart");
+  // console.log(localStorage.getItem("cart"))
+  // const [cartCount, setCartCount] = localStorage.getItem("cart");
   return (
     <Section sectionName={"header"}>
       <header>
@@ -57,8 +57,8 @@ const Header = () => {
                         fontSize: "13px",
                         top: "-10px",
                       }}
-                    >{cartCount}</span>
-                    </i>
+                    ></span>
+                  </i>
                 </Link>
                 <Link to="/cart" className="nav-link login fs-4">
                   Login<i class="bi bi-person-plus-fill mx-2"></i>
