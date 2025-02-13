@@ -1,3 +1,17 @@
 .pointer{
     cursor: pointer;
 }
+
+
+.input-search{
+    outline:none;
+    background-color: var(--clr-grey-10);
+    
+}
+@media (min-width: 1200px) { 
+.filter-container{
+    height: "100vh "!important; 
+    top: "10px" !important ;
+}
+
+}

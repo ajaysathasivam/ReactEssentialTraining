@@ -12,21 +12,21 @@ const CustomDesign = () => {
     customDesignIcon;
   return (
     <Section sectionName={"custom"}>
-      <div className="row">
+      <div className="row custom-row ">
         <div className="col-12 ">
           {customDesignDiscription?.map((obj) => (
-            <div className="row d-flex justify-content-between py-5">
-              <div className="col-lg-6">
-                <p className="h4">{obj.heading}</p>
+            <div className="row d-flex justify-content-between py-5 py-lg-5">
+              <div className="col-lg-6 pe-5">
+                <p className="h2 text-capitalize custom-card-heading">{obj.heading}</p>
               </div>
               <div className="col-lg-6">
-                <p>{obj.discription}</p>
+                <p className="custom-card-body lh-lg">{obj.discription}</p>
               </div>
             </div>
           ))}
         </div>
         {customDesignContent?.map((card, idx) => (
-          <div className="col  " key={idx}>
+          <div className="col-12 col-lg-4   " key={idx}>
             <Card className={"custom-card"}>
               <span className="fs-1 rounded-circle d-block  mx-auto   custom-design-icon">
                 <svg
@@ -41,10 +41,10 @@ const CustomDesign = () => {
                   <path d={card.customDesignIcon.path.d} />
                 </svg>
               </span>
-              <p className="custome-design my-3 h5">
+              <p className="custome-design my-4 h3 custom-card-heading text-capitalize">
                 {card.customDesignHeading}
               </p>
-              <p>{card.customDesignBody}</p>
+              <p className="lh-lg custom-card-body">{card.customDesignBody}</p>
             </Card>
           </div>
         ))}

@@ -1,13 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Section from "../layout/Section";
-import "./Header.scss"
+import "./Header.scss";
 
 const Header = () => {
+  console.log(localStorage.getItem("cart"))
+  const [cartCount, setCartCount] = localStorage.getItem("cart");
   return (
     <Section sectionName={"header"}>
       <header>
-        <nav className="navbar  navbar-expand-lg bg-body-tertiary">
+        <nav className="navbar  navbar-expand-lg ">
           <div className="container-fluid justify-content-between">
             <Link to="/">
               <img src="/src/assets/logo.svg" alt="" className="logo" />
@@ -28,13 +30,13 @@ const Header = () => {
               id="navbarNavAltMarkup"
             >
               <div className="navbar-nav">
-                <Link to="/" className="mx-2 nav-link ">
+                <Link to="/" className="mx-2 nav-link underline ">
                   Home
                 </Link>
-                <Link to="/about" className=" mx-2  nav-link">
+                <Link to="/about" className=" mx-2 underline  nav-link">
                   About
                 </Link>
-                <Link to="/products" className=" mx-2 nav-link">
+                <Link to="/products" className=" mx-2  underline nav-link">
                   Products
                 </Link>
               </div>
@@ -44,10 +46,21 @@ const Header = () => {
               id="navbarNavAltMarkup"
             >
               <div className="navbar-nav">
-                <Link to="/cart" className="nav-link cart fs-5">
-                  Cart<i class="bi bi-cart-fill mx-2"></i>
+                <Link to="/cart" className="nav-link cart  fs-4">
+                  Cart
+                  <i class="bi bi-cart-fill mx-2 position-relative">
+                    <span
+                      className="position-absolute bgprimary text-light text-center rounded-circle "
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        fontSize: "13px",
+                        top: "-10px",
+                      }}
+                    >{cartCount}</span>
+                    </i>
                 </Link>
-                <Link to="/cart" className="nav-link login fs-5">
+                <Link to="/cart" className="nav-link login fs-4">
                   Login<i class="bi bi-person-plus-fill mx-2"></i>
                 </Link>
               </div>

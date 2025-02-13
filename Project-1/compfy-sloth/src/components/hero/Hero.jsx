@@ -12,10 +12,10 @@ const Hero = ({ heading, bodyContent }) => {
     <section className="hero-section">
       <div className="row align-items-center">
         <div className=" col-lg-6">
-          <h1 className=" text-capitalize ">{heading}</h1>
-          <p className="lh-lg">{bodyContent}</p>
+          <p className=" text-capitalize chead fw-bold lh-1 w-75 display-4 ">{heading}</p>
+          <p className="lh-lg fs-5 py-4">{bodyContent}</p>
           <Button
-            className="btn px-4 btn-primary"
+            className="btn  primary bgprimary text-uppercase"
             text="shop now"
             onClick={() => navigate("/products")}
           />

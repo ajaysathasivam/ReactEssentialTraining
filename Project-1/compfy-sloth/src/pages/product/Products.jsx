@@ -7,6 +7,9 @@ import Card from "../../components/card/Card";
 import DropDown from "../../components/dropDown/DropDown";
 import { filterData } from "../../utils/FilterData";
 import { useFormik } from "formik";
+import "./Products.scss"
+import Button from "../../components/button/Button";
+import { useNavigate } from "react-router-dom";
 
 const Products = () => {
   const data = useSelector((state) => state.products.value);
@@ -61,6 +64,7 @@ const Products = () => {
         setProducts(data);
     }
   }, [sortItem]);
+
   useEffect(() => {
     switch (sortCompany) {
       case 1:
@@ -90,10 +94,12 @@ const Products = () => {
         setProducts(data);
     }
   }, [sortCompany]);
+
   useEffect(()=>{
     const filteredProductsByCatogories=data.filter((obj)=>obj.category == catogories)
     setProducts(filteredProductsByCatogories)
   },[catogories])
+  
   const handleColor =(color)=>{
     const filteredProductsByColor = data.filter((obj) =>
       obj.colors.some((clr) => clr.toLowerCase() === color.toLowerCase())
@@ -163,6 +169,7 @@ const Products = () => {
       default:
     }
   };
+  const navigate = useNavigate()
  
 
   return (
@@ -171,8 +178,8 @@ const Products = () => {
       <Section>
         <div className="row ">
           <div
-            className="col-lg-3 position-sticky"
-            style={{ height: "100vh", top: "10px" }}
+            className="col-lg-3 filter-container position-sticky"
+            
           >
             <form onSubmit={formik.handleSubmit}>
               {filterData?.map((item) => (
@@ -182,22 +189,25 @@ const Products = () => {
                     value={formik.values?.[item.input.name]}
                     onChange={(e) => handleChange(e, "name")}
                     name={item.input.name}
+                    placeholder="search"
+                    className="border-0 input-search px-2 py-2 w-100 rounded"
                   />
                   <ul className="navbar-nav">
-                    {item.catogories.title}
+                   <span className="chead-color my-2 text-capitalize fw-bold">{item.catogories.title}</span> 
+                   <span className="chead-color my-1 phead-color text-decoration-underline" style={{letterSpacing:"1.6px",fontSize:"0.8rem"}}>All</span> 
                     {item.catogories.subCt.map((subCt) => (
-                      <li className="nav-item ps-4 pointer" onClick={()=>setCatogories(subCt)}>{subCt}</li>
+                      <li className="nav-item my-1 text-capitalize   phead-color pointer" style={{letterSpacing:"1.6px",fontSize:"0.9rem"}} onClick={()=>setCatogories(subCt)}>{subCt}</li>
                     ))}
                   </ul>
                   <div>
-                    <p className="p-0 m-0">{item?.company?.title}</p>
+                    <p className="p-0 m-0 chead-color fw-bold mt-4 text-capitalize">{item?.company?.title}</p>
                     <DropDown list={item?.company?.comLst} setSortItem={setCompany} />
                   </div>
                   {/* {color} */}
                   <div>
-                    <p className="p-0 m-0 h6">{item.color.title}</p>
-                    <div className="d-flex align-items-center">
-                      <span className="me-2">all</span>
+                    <p className="p-0 m-0  chead-color fw-bold mt-3 text-capitalize">{item.color.title}</p>
+                    <div className="d-flex align-items-center my-4">
+                      <span className="me-2 phead-color text-decoration-underline">All</span>
                       {item.color.colors.map((color) => (
                         <span 
                           style={{
@@ -213,8 +223,8 @@ const Products = () => {
                     </div>
                   </div>
                   <div>
-                    <p className="p-0 m-0 ">{item.range.title}</p>
-                    <p className="p-0 m-0"> ${priceRange}</p>
+                    <p className="p-0 m-0 chead-color fw-bold mt-3 text-capitalize">{item.range.title}</p>
+                    <p className="p-0 m-0 phead-color my-2"> ${priceRange}</p>
                     <input
                       type={item.range.type}
                       min={item.range.min}
@@ -224,8 +234,8 @@ const Products = () => {
                     />
                   </div>
 
-                  <div>
-                    <label htmlFor="" className="form-label">
+                  <div className="my-2">
+                    <label htmlFor="" className="form-label chead-color me-5  ">
                       {item.checkbox.title}
                     </label>
                     <input
@@ -237,35 +247,35 @@ const Products = () => {
                   </div>
                 </>
               ))}
-              <button className="btn" onClick={()=>{formik.handleReset,handleClear}}>
-                clear fillter
-              </button>
+              <Button className="btn btn-danger my-2 mb-4  px-5" text={"clear fillter"} onClick={()=>{formik.handleReset,handleClear}}>
+                
+              </Button>
             </form>
           </div>
 
           <div className="col">
-            <div className="row">
-              <div className="col-lg-1 d-flex h-25  ">
+            <div className="row py-3">
+              <div className="col-lg-2 py-2  ">
                 <i
-                  className="bi bi-grid-fill pointer bg-dark text-light p-1  rounded  mx-1"
+                  className="bi bi-grid-fill pointer bg-dark text-light fs-6 p-1  rounded-1  mx-1"
                   onClick={() => setLayout(" col-md-6 col-lg-4")}
                 ></i>
                 <i
-                  className="bi bi-list border pointer border-dark rounded p-1 "
+                  className="bi bi-list border pointer border-dark rounded-1 p-1  fs-6  "
                   onClick={() => setLayout(" col-12")}
                 ></i>
               </div>
-              <div className="col-lg-2">
-                <span style={{ fontSize: "0.9rem" }}>
+              <div className="col-lg-3 my-2">
+                <span className="phead-color fs-6">
                   {records ? `${records} product found` : "0 product found"}
                 </span>
               </div>
-              <div className="col">
-                <hr />{" "}
+              <div className="col-12 col-lg-4">
+                <hr />
               </div>
-              <div className="col-3    d-flex align-items-center justify-content-end">
-                <div className=" text-end">sort by</div>
-                <div className="col bg-light">
+              <div className="col-6  col-lg-3   d-flex align-items-center justify-content-end">
+                <div className="  align-item-center w-50">sort by</div>
+                <div className=" bg-gray w-75">
                   <DropDown
                     list={[
                       "price-(highest)",
@@ -280,11 +290,12 @@ const Products = () => {
             </div>
             <div className="row">
               {products?.map((product) => (
-                <div className={`${layout} col `}>
+                <div className={`${layout} col-12 `}>
                   <Card className={"featured-card"}>
                     <div className="">
                       <div
                         className={`${layout === "col-12" && "flow-column"}`}
+                        onClick={()=>navigate(`/poster/${product.id}`)}
                       >
                         <div className="" style={{ height: "175px" }}>
                           <img
@@ -295,9 +306,9 @@ const Products = () => {
                         </div>
 
                         <div className="d-flex justify-content-between my-2">
-                          <p>{product.name}</p>
-                          <p>
-                            $<span className="ms-1">{product.price}</span>
+                          <p className="chead-color text-capitalize">{product.name}</p>
+                          <p className="chead primary">
+                            $<span className="ms-1">{(product.price/100).toFixed(2)}</span>
                           </p>
                         </div>
                       </div>

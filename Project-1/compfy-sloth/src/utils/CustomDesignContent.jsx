@@ -9,7 +9,7 @@ export const customDesignIcon = {
 };
 export const customDesignDiscription = [
   {
-    heading: "custom furniturebuilt only for you",
+    heading: "custom furniture built only for you",
     discription:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe dolorum debitis consectetur reprehenderit non aliquam voluptates dolore aut vero consequuntur.",
   },

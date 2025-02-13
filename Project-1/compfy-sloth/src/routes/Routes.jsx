@@ -17,8 +17,8 @@ const RoutesCom = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/poster" element={<Poster />} />
-          <Route path="/cart" element={<Cart />} />
+          <Route path="/poster/:id" element={<Poster />} />
+          <Route path="/cart/:id" element={<Cart />} />
         </Routes>
         <Footer />
       </BrowserRouter>

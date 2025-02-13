@@ -2,7 +2,7 @@ import React from 'react'
 
 const Button = ({className,text,onClick}) => {
   return (
-    <button className={className} onClick={onClick}>{text.toUpperCase()}</button>
+    <button className={`${className} px-4 py-6`} onClick={onClick}>{text}</button>
   )
 }
 

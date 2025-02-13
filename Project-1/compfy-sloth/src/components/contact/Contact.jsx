@@ -7,16 +7,16 @@ const Contact = () => {
   return (
     <Section sectionName={"contact"}>
       {contactSectionData?.map((data) => (
-        <div className="row align-items-center">
-          <div className="col-lg-6">
-            <p className=" text-capitalize  h3  ">{data?.joinHeader}</p>
-            <p className="lh-lg">{data?.joinBody}</p>
+        <div className="row my-5">
+          <div className="col-lg-6 ">
+            <p className=" text-capitalize  h3 my-5 chead fw-bold ">{data?.joinHeader}</p>
+            <p className="lh-lg phead" style={{letterSpacing:"1px"}}>{data?.joinBody}</p>
           </div>
           <div
             className="col-lg-6 
-          align-items-center contact"
+          align-content-end pb-5 contact"
           >
-            <div className="  w-100 d-flex">
+            <div className="  w-100 d-flex ">
               {data?.inputs?.map((obj, idx) => (
                 <input
                   key={idx}

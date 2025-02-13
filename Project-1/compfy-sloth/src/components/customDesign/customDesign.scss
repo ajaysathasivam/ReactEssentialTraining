@@ -8,4 +8,27 @@
 }
 .section-custom{
     background-color: var(--clr-primary-10);
+    padding-top: 0 !important;
 }
+.custom-card-heading{
+    color:var(--clr-primary-1);
+    letter-spacing: 1.6px;
+}
+.custom-card-body{
+    color: var(--clr-primary-3);
+}
+@media (min-width: 1200px) { 
+    .section-custom{
+        max-height: 500px;
+        margin-bottom: 100px !important;
+    }
+    .custom-row{
+        position: relative;
+        top:70px;
+        padding-top: 0 !important;
+    }
+    .py-lg-5{
+        padding-top:0 !important;
+    }
+
+ }

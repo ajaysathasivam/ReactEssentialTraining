@@ -5,10 +5,13 @@ import Card from "../card/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { setValue } from "../../store/productsSlice/ProductsSlice";
 import { useNavigate } from "react-router-dom";
+import HoverSearch from "../hoverSearch/HoverSearch";
+import Button from "../button/Button";
 
 const Featured = () => {
   const navigate = useNavigate()
   const [data, setData] = useState(null);
+  const [isHover, setIsHover] = useState(false)
   const dispatch = useDispatch();
   useEffect(() => {
     const controller = new AbortController();
@@ -43,13 +46,13 @@ const Featured = () => {
     <Section sectionName={"featured"}>
       <div className="row">
         <div className="col-12 text-center pb-5">
-          <p className="h2 featured-title">Featured Products</p>
+          <p className="h2 chead  fw-bold featured-title">Featured Products</p>
         </div>
         {data?.map((product) => (
-          <div className=" col-md-6 col-lg-4 ">
+          <div className=" col-md-6 col-lg-4  ">
             <Card className={"featured-card"}>
-              <div className="col">
-                <div className=""   style={{height:"225px"}}>
+              <div className="col " >
+                <div className="position-relative"   style={{height:"225px"}}>
                   <img
                     src={product.image}
                     className="w-100 h-100 object-fit-cover rounded"
@@ -57,12 +60,15 @@ const Featured = () => {
                     alt=""
 
                   />
+                   <HoverSearch />
                 </div>
                 <div className="d-flex justify-content-between my-2">
-                  <p>{product.name}</p>
-                  <p>$<span className="ms-1">{product.price}</span></p>
+                  <p className="chead text-capitalize">{product.name}</p>
+                  <p className="chead primary">$<span className="ms-1">{product.price}</span></p>
                 </div>
+               
               </div>
+              
             </Card>
           </div>
         ))}
@@ -70,7 +76,7 @@ const Featured = () => {
         
         
         <div className="col-12 text-center py-5">
-          <button className="btn btn-primary  " onClick={()=>navigate("/products")}>All Products</button>
+          <Button className="btn bgprimary py-6 "  text={"All Products"} onClick={()=>navigate("/products") }></Button>
         </div>
       </div>
     </Section>
