@@ -8,7 +8,9 @@ export const cartSlice = createSlice({
     reducers: {
         setCartValue: (state, action) => {
             console.log(action.payload)
-            state.items = [...state.items, action.payload]
+            const item = [...state.items, action.payload]
+            state.items = item
+            localStorage.setItem("cart",JSON.stringify(item))
         }
     }
 })

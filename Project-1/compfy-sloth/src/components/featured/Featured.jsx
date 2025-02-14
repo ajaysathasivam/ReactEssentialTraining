@@ -9,10 +9,13 @@ import HoverSearch from "../hoverSearch/HoverSearch";
 import Button from "../button/Button";
 
 const Featured = () => {
-  const navigate = useNavigate()
-  const [data, setData] = useState(null);
-  const [isHover, setIsHover] = useState(false)
+  const navigate = useNavigate();
+  const [data, setData] = useState();
+  const [isHover, setIsHover] = useState(false);
   const dispatch = useDispatch();
+  const hover = ()=>{
+    setIsHover(0)
+  }
   useEffect(() => {
     const controller = new AbortController();
 
@@ -25,8 +28,9 @@ const Featured = () => {
           }
         );
         const result = await response.json();
-        setData(result.slice(5,8));
-        dispatch(setValue(result));
+        const limited = await result.slice(1,4)
+        setData(limited)
+        dispatch(setValue(result))
       } catch (error) {
         if (error.name === "AbortError") {
           console.log("Request was aborted");
@@ -48,35 +52,43 @@ const Featured = () => {
         <div className="col-12 text-center pb-5">
           <p className="h2 chead  fw-bold featured-title">Featured Products</p>
         </div>
-        {data?.map((product) => (
+        {data?.map((product,idx,) => (
           <div className=" col-md-6 col-lg-4  ">
-            <Card className={"featured-card"}>
-              <div className="col " >
-                <div className="position-relative"   style={{height:"225px"}}>
-                  <img
-                    src={product.image}
-                    className="w-100 h-100 object-fit-cover rounded"
+            
+          <Card className={"featured-card"}>
+            <div className="col ">
+              <div className="position-relative" style={{ height: "225px" }}>
+              <i  
+                  className="bi bi-search position-absolute featured-image opacity-0  primary fw-bold d-flex align-items-center justify-content-center  w-100 h-100 display-6"
+                  onClick={() => navigate(`/poster/${product.id}`)}
                   
-                    alt=""
-
-                  />
-                   <HoverSearch />
-                </div>
-                <div className="d-flex justify-content-between my-2">
-                  <p className="chead text-capitalize">{product.name}</p>
-                  <p className="chead primary">$<span className="ms-1">{product.price}</span></p>
-                </div>
-               
+                ></i>
+                <img
+                  src={product.image}
+                  className="w-100 h-100 object-fit-cover rounded "
+                  alt=""
+                  
+                />
               </div>
-              
-            </Card>
-          </div>
+              <div className="d-flex justify-content-between my-2">
+                <p className="chead text-capitalize">{product.name}</p>
+                <p className="chead primary">
+                  $<span className="ms-1">{product.price}</span>
+                </p>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+          
         ))}
 
-        
-        
         <div className="col-12 text-center py-5">
-          <Button className="btn bgprimary py-6 "  text={"All Products"} onClick={()=>navigate("/products") }></Button>
+          <Button
+            className="btn bgprimary py-6 "
+            text={"All Products"}
+            onClick={() => navigate("/products")}
+          ></Button>
         </div>
       </div>
     </Section>

@@ -16,3 +16,16 @@
 .featured-card{
     padding: 0 !important;
 }
+.featured-card{
+  
+    .featured-image:hover{
+        display: block;
+        background-color:rgba(0, 0, 0, 0.486);
+        position: relative;
+        transition: opacity 0.3s ease-in-out;
+        opacity: 1 !important;
+        
+    };
+    
+    
+}

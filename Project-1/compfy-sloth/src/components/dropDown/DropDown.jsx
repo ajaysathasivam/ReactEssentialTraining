@@ -14,7 +14,7 @@ const DropDown = ({ list, setSortItem }) => {
       {dropDown && (
         <div className="position-absolute top-1 w-100 bg-light py-2 px-2 border rounded ">
           {list.map((item, idx) => (
-            <a className="nav-link  " onClick={() => setSortItem(idx+1)}>
+            <a key={idx} className="nav-link  " onClick={() => setSortItem(idx+1)}>
               {item}
             </a>
           ))}

@@ -9,10 +9,11 @@ import BreadCrums from "../components/breadcrums/BreadCrums";
 import Cart from "../pages/cart/Cart";
 import Poster from "../pages/poster/Poster";
 const RoutesCom = () => {
+  // const numberOfItems = JSON.parse(localStorage.getItem('cart')).length
   return (
     <>
       <BrowserRouter>
-        <Header />
+        <Header cartItem={2} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />

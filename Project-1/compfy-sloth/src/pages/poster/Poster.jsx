@@ -5,11 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "../../components/button/Button";
 import ImageCart from "../../components/imagecard/ImageCart";
 import { setCartValue } from "../../store/CartSlice/CartSlice";
+import BreadCrums from "../../components/breadcrums/BreadCrums";
 
 const Poster = () => {
   const { id } = useParams();
   const data = useSelector((state) => state.products.value);
   const product = data?.filter((obj) => obj.id === id);
+  const [itemName,setItemName] = useState(...product)
+
   const [defaultColor, setDefault] = useState(product?.map((obj) => obj.colors[0]))
   const [productView, setProductView] = useState(product);
   const [image, setImage] = useState(product[0].image);
@@ -40,11 +43,14 @@ const Poster = () => {
     navigate(`/cart`)
   }
   return (
+    <>
+    <BreadCrums current={`Product / ${itemName.name}`}/>
+   
     <Section>
       <div className="row">
         <div className="col-12">
           <Button
-            className="primary bgprimary rounded border-0 my-4"
+            className="primary bgprimary rounded border-0 my-4 lts text-capitalize"
             text={"back to product"}
             onClick={() => navigate("/products")}
           ></Button>
@@ -134,14 +140,14 @@ const Poster = () => {
 
                     {item?.colors?.map((color) => (
                       <button
-                        className="rounded-circle border-0"
+                        className="rounded-circle border-0 mx-1"
                         style={{
                           backgroundColor: `${color}`,
                           width: "20px",
                           height: "20px",
                         }}
                         onClick={() => setDefault(color)}
-                      >{defaultColor == color ? "1" : ''}</button>
+                      >{defaultColor == color ? <i className="bi bi-check text-light fw-bold w-100 h-100 d-flex justify-content-center align-items-center"></i> : ''}</button>
                     ))}
                   </div>
                 </div>
@@ -172,6 +178,7 @@ const Poster = () => {
         ))}
       </div>
     </Section>
+    </>
   );
 };
 

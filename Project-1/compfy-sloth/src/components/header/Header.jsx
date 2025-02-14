@@ -2,10 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Section from "../layout/Section";
 import "./Header.scss";
+import { useSelector } from "react-redux";
 
-const Header = () => {
+const Header = ({cartItem}) => {
   // console.log(localStorage.getItem("cart"))
-  // const [cartCount, setCartCount] = localStorage.getItem("cart");
+  // const cartItem = useSelector((state)=>state.cart.items)
+  // console.log(cartItem)
   return (
     <Section sectionName={"header"}>
       <header>
@@ -57,7 +59,7 @@ const Header = () => {
                         fontSize: "13px",
                         top: "-10px",
                       }}
-                    ></span>
+                    >{cartItem}</span>
                   </i>
                 </Link>
                 <Link to="/cart" className="nav-link login fs-4">
