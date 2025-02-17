@@ -77,6 +77,9 @@ const Products = () => {
 
     switch (type) {
       case "name":
+        if(allNewValues){
+          alert(0)
+        }
         const { value: textvalue } = e.target;
         const filteredItems = allNewValues.filter((curr) =>
           curr.name.toLowerCase().includes(textvalue.toLowerCase())
