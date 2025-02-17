@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Section from "../../components/layout/Section";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./Cart.scss"
 import BreadCrums from "../../components/breadcrums/BreadCrums";
 import { setCartValue, setClerCart } from "../../store/CartSlice/CartSlice";
+import { convertPrice } from "../../utils/FilterData";
 
 const Cart = () => {
   const [cartItem, setCartItem] = useState(
@@ -12,6 +13,7 @@ const Cart = () => {
   );
   const data = useSelector((state) => state.cart.items);
   const dispatch = useDispatch()
+  const currentPath = useLocation()
   const [subTotal, setSubTotal] = useState(5);
   const navigate = useNavigate();
   const shippingFee = 5.8;
@@ -69,7 +71,7 @@ const Cart = () => {
   };
   return (
     <>
-      <BreadCrums current={"Cart"} />
+      <BreadCrums current={currentPath.pathname} />
 
       <Section>
         {cartItem.length > 0 ?
@@ -112,7 +114,7 @@ const Cart = () => {
 
                 <div className="d-flex  align-items-center cart-price d-none">
                   <span className="primary lts">
-                    ${(obj.price / 100).toFixed(2)}
+                    $  { convertPrice( obj.price) }
                   </span>
                 </div>
                 <div className="d-flex  align-items-center">
@@ -131,7 +133,7 @@ const Cart = () => {
                   </button>
                 </div>
                 <div className="d-flex align-items-center cart-sub d-none">
-                  <span className="primary">${(obj.subTotal / 100).toFixed(2)} </span>
+                  <span className="primary">${obj.subTotal} </span>
                 </div>
                 <div>
                   <i className="bi bi-trash p-1  text-light bg-danger" onClick={() => handleDel(obj.id)}></i>
@@ -159,7 +161,7 @@ const Cart = () => {
               <div className="col-12 col-lg-4 text-capitalize   border px-5 py-4">
                 <div className="row">
                   <div className="col-8 chead-color py-2 fw-normal">subtotal:</div>
-                  <div className="col-4"> ${(subTotal / 100).toFixed(2)}</div>
+                  <div className="col-4"> ${subTotal.toFixed(2)}</div>
                 </div>
                 <div className="row">
                   <div className="col-8 phead-color">Shipping fee:</div>
@@ -168,7 +170,7 @@ const Cart = () => {
                 <hr className="my-4" />
                 <div className="row align-items-center ">
                   <div className="col-8 fs-3 fw-bold chead-color">Order Total:</div>
-                  <div className="col">${(total / 100).toFixed(2)}</div>
+                  <div className="col">${total.toFixed(2) }</div>
                 </div>
               </div>
             </div>

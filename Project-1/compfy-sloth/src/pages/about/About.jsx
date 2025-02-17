@@ -3,10 +3,13 @@ import Layout from "../../components/layout/Layout";
 import "./About.scss";
 import { aboutBody, aboutHeader, aboutImage } from "../../utils/AboutContent";
 import BreadCrums from "../../components/breadcrums/BreadCrums";
+import { useLocation } from "react-router-dom";
 const About = () => {
+  const currentPath = useLocation()
+  console.log(currentPath)
   return (
     <>
-      <BreadCrums current={"About"} />
+      <BreadCrums current={currentPath.pathname} />
       <Layout>
         <div className="row  my-5 py-5 ">
           <div className="col-lg-6 p-2" style={{ height: "500px" }}>

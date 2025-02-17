@@ -1,35 +1,38 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import BreadCrums from "../../components/breadcrums/BreadCrums";
 import Layout from "../../components/layout/Layout";
 import { useDispatch, useSelector } from "react-redux";
 import Section from "../../components/layout/Section";
 import Card from "../../components/card/Card";
 import DropDown from "../../components/dropDown/DropDown";
-import { filterData } from "../../utils/FilterData";
+import { convertPrice, filterData } from "../../utils/FilterData";
 import { useFormik } from "formik";
 import "./Products.scss";
 import Button from "../../components/button/Button";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { setValue } from "../../store/productsSlice/ProductsSlice";
-
 const Products = () => {
   // const init= useSelector((state)=>state.products.value ||[])
   const [data, setData] = useState();
   const [products, setProducts] = useState(data || []);
-  const [records, setRecords] = useState(products.length);
   const [layout, setLayout] = useState(false);
   const [sortItem, setSortItem] = useState(0);
   const [priceRange, setRange] = useState(0);
-  const [sortCompany, setCompany] = useState(null);
-  const [defaultCatagory, setCatagory] = useState("all");
+  const currentPath = useLocation()
+  console.log(currentPath)
   const dispatch = useDispatch();
-
+  const [defaultColor, setdefColor] = useState("all");
   const [productLists, setProductLists] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
+  const [records, setRecords] = useState();
+  const [companyActive, setCompanyActive] = useState("all");
+  const [defaultCatagory, setCatagory] = useState("all");
+  const navigate = useNavigate();
+  const inputRef = useRef();
   const initValue = {
     search: "",
-    range: "",
-    freeShiping: "",
+    range: 0,
+    freeShiping: true,
   };
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +43,7 @@ const Products = () => {
         const result = await response.json();
         setProductLists(result || []);
         setAllProducts(result || []);
+        setRecords(result.length);
       } catch (error) {
         if (error.name === "AbortError") {
           console.log("Request was aborted");
@@ -48,7 +52,6 @@ const Products = () => {
         }
       }
     };
-
     fetchData();
   }, []);
   const formik = useFormik({
@@ -59,26 +62,23 @@ const Products = () => {
       setRecords(data.length);
     },
   });
-
   const handleClear = () => {
     setProducts(allProducts);
   };
-  const categoryFilter = (arr, type) => {
+  const categoryFilter = (arr, type, obj) => {
     const filteredItems = arr.filter(
       (curr) =>
-        curr.category.toLowerCase().replaceAll(" ", "") === type.toLowerCase()
+        curr?.[obj].toLowerCase().replaceAll(" ", "") === type.toLowerCase()
     );
     arr = type && type !== "all" ? [...filteredItems] : [...arr];
     return arr;
   };
   const handleChange = (e, type) => {
-    // const { value } = e.target;
     let allNewValues = [...productLists];
-
     switch (type) {
       case "name":
-        if(allNewValues){
-          alert(0)
+        if (allNewValues) {
+          alert(0);
         }
         const { value: textvalue } = e.target;
         const filteredItems = allNewValues.filter((curr) =>
@@ -86,62 +86,55 @@ const Products = () => {
         );
         allNewValues = textvalue ? [...filteredItems] : [...allProducts];
         break;
-
       case "catogories":
         const value = e.trim().replaceAll(" ", "").toLowerCase();
-        allNewValues = categoryFilter(allNewValues, value);
+        setCatagory(e);
+        allNewValues = categoryFilter(allNewValues, value, "category");
         break;
-
       case "range":
-        console.log(e)
-        // const priceValue = Number(value);
-        // const filteredProductsByRange = data.filter(
-        //   (obj) => Number(obj.price) > priceValue
-        // );
-        // setProducts(filteredProductsByRange);
-        // setRecords(filteredProductsByRange.length);
-        // setRange(priceValue);
-        // if (!value) {
-        //   setProducts(data);
-        //   setRecords(data.length);
-        // }
-        // formik.setValues(value);
+        const range = inputRef.current.value;
+        console.log(range);
+        const filteredRangeItems = allNewValues.filter(
+          (curr) => range > curr.price
+        );
+        allNewValues = filteredRangeItems;
         break;
       case "checkbox":
-        const filteredProductsByCheckbox = products.filter(
-          (obj) => obj.shipping === (value === "on")
-        );
-        setProducts(filteredProductsByCheckbox);
-        setRecords(filteredProductsByCheckbox.length);
-        if (!value) {
-          setProducts(data);
-          setRecords(data.length);
+        const shipping = formik.values.freeShiping;
+        if (shipping) {
+          const filteredProductsByCheckbox = allNewValues.filter(
+            (obj) => obj.shipping == shipping
+          );
+          allNewValues = filteredProductsByCheckbox;
         }
-        formik.setValues(value);
         break;
-      case "color":
-        console.log(e);
-        const filteredProductsByColor = products.filter(
-          (obj) => obj.shipping === (value === "on")
-        );
-        setProducts(filteredProductsByColor);
-        setRecords(filteredProductsByColor.length);
-        if (!value) {
-          setProducts(data);
-          setRecords(data.length);
+      case "clr":
+        
+        if (typeof(e) === "object") {
+          setdefColor("all")
+          console.log(allNewValues)
+        } else {
+          setdefColor(e);
+          const filteredClrItems = allNewValues.filter((obj) =>
+            obj.colors.includes(e)
+          );
+          allNewValues = filteredClrItems;
         }
-        formik.setValues(value);
-        break;
 
+        break;
+      case "company":
+        setCompanyActive(e);
+        allNewValues = categoryFilter(allNewValues, e, type);
+        break;
       default:
     }
     setProductLists(allNewValues);
+    setRecords(allNewValues.length);
   };
-  const navigate = useNavigate();
-
+  
   return (
     <>
-      <BreadCrums current={"Products"} className={"position-relative"} />
+      <BreadCrums current={currentPath.pathname} className={"position-relative"} />
       <Section>
         <div className="row ">
           <div className="col-lg-3 filter-container position-sticky">
@@ -159,10 +152,15 @@ const Products = () => {
                     <span className="chead-color my-2 text-capitalize fw-bold">
                       {item.catogories.title}
                     </span>
-
                     {item.catogories.subCt.map((subCt) => (
                       <li
-                        className={`nav-item my-1 text-capitalize   phead-color pointer text-decoration-none`}
+                        className={`nav-item my-1 text-capitalize   phead-color pointer text-decoration-none
+                          ${
+                            defaultCatagory.toLowerCase() ===
+                            subCt.toLowerCase()
+                              ? "text-decoration-underline"
+                              : "null"
+                          }`}
                         style={{ letterSpacing: "1.6px", fontSize: "0.9rem" }}
                         onClick={() => handleChange(subCt, "catogories")}
                       >
@@ -174,10 +172,20 @@ const Products = () => {
                     <p className="p-0 m-0 chead-color fw-bold mt-4 text-capitalize">
                       {item?.company?.title}
                     </p>
-                    <DropDown
-                      list={item?.company?.comLst}
-                      setSortItem={setCompany}
-                    />
+                    <ul className=" p-0 pt-2  ">
+                      {item?.company.comLst.map((company) => (
+                        <li
+                          className={`list-unstyled pointer pb-2 phead-color  text-capitalize ${
+                            companyActive === company
+                              ? "text-decoration-underline"
+                              : "null"
+                          }`}
+                          onClick={() => handleChange(company, "company")}
+                        >
+                          {company}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                   {/* {color} */}
                   <div>
@@ -185,45 +193,69 @@ const Products = () => {
                       {item.color.title}
                     </p>
                     <div className="d-flex align-items-center my-4">
-                      <span className="me-2 phead-color text-decoration-underline">
-                        All
-                      </span>
-                      {item.color.colors.map((color) => (
-                        <span
-                          style={{
-                            backgroundColor: color,
-                            width: "20px",
-                            height: "20px",
-                            opacity: "0.5",
-                          }}
-                          className="rounded-circle border-0 mx-1 pointer"
-                          onClick={() => handleColor(color)}
-                        ></span>
-                      ))}
+                      {item.color.colors.map((color) =>
+                        color == "all" ? (
+                          <span
+                            className="me-2 text-capitalize pointer phead-color text-decoration-underline"
+                            onClick={() => handleChange(item.color, "clr")}
+                          >
+                            {color}
+                          </span>
+                        ) : (
+                          <span
+                            style={{
+                              backgroundColor: color,
+                              width: "20px",
+                              height: "20px",
+                              opacity: "0.5",
+                            }}
+                            className="rounded-circle border-0 mx-1 pointer text-center "
+                            onClick={() => handleChange(color, "clr")}
+                          >
+                            {defaultColor === color ? (
+                              <i className="bi bi-check fw-bold text-dark opacity-1"></i>
+                            ) : null}
+                          </span>
+                        )
+                      )}
                     </div>
                   </div>
                   <div>
                     <p className="p-0 m-0 chead-color fw-bold mt-3 text-capitalize">
                       {item.range.title}
                     </p>
-                    <p className="p-0 m-0 phead-color my-2"> ${priceRange}</p>
+                    <p className="p-0 m-0 phead-color my-2">
+                      {" "}
+                      ${convertPrice(formik.values.range)}
+                    </p>
                     <input
                       type={item.range.type}
                       min={item.range.min}
-                      value={formik.values?.[item.range.type]}
-                      onChange={(e) => handleChange(e, "range")}
-                      max={item.range.max}
+                      value={formik.values.range}
+                      // value={0}?
+                      name="range"
+                      ref={inputRef}
+                      onChange={(e) => {
+                        handleChange(e, "range"), formik.handleChange(e);
+                      }}
+                      max={Number(item.range.max)}
                     />
                   </div>
-
                   <div className="my-2">
                     <label htmlFor="" className="form-label chead-color me-5  ">
                       {item.checkbox.title}
                     </label>
                     <input
                       type={item.checkbox.type}
-                      value={formik.value?.[item.checkbox.name]}
-                      onChange={(e) => handleChange(e, "checkbox")}
+                      value={formik.values.freeShiping}
+                      name="freeShiping"
+                      onClick={(e) => {
+                        handleChange(true, "checkbox"),
+                          formik.setValues({
+                            ...formik.values,
+                            freeShiping: !formik.values.freeShiping,
+                          });
+                      }}
                       className="mx-2"
                     />
                   </div>
@@ -238,7 +270,6 @@ const Products = () => {
               ></Button>
             </form>
           </div>
-
           <div className="col">
             <div className="row py-3">
               <div className="col-lg-2 py-2  ">
@@ -274,30 +305,67 @@ const Products = () => {
                 </div>
               </div>
             </div>
-            <div className="row">
+            <div className="row gy-4 ">
               {productLists?.map((product) => (
                 <div
                   className={layout ? "col-4  d-block" : "col-12 d-flex"}
                   onClick={() => navigate(`/poster/${product.id}`)}
                 >
-                  <div className="" style={{ height: "175px" }}>
+                  <div
+                    className=""
+                    style={{
+                      height: "175px",
+                      width: `${!layout ? "45%" : "auto"}`,
+                    }}
+                  >
                     <img
                       src={product?.image}
                       className="w-100 h-100 object-fit-cover rounded"
                       alt={product?.name}
                     />
                   </div>
-
-                  <div className="d-flex justify-content-between my-2">
-                    <p className="chead-color text-capitalize">
+                  <div
+                    className={`d-flex   ${
+                      !layout
+                        ? "mx-2 ms-5  flex-column justify-content-center my-2 w-100"
+                        : "justify-content-between"
+                    } `}
+                  >
+                    <p
+                      className={`chead-color text-capitalize mb-0 ${
+                        !layout ? "fs-4 fw-bold " : ""
+                      } `}
+                    >
                       {product.name}
                     </p>
-                    <p className="chead primary">
+                    <p
+                      className={`chead primary mb-0 ${
+                        !layout ? " fw-bold " : ""
+                      }`}
+                    >
                       $
                       <span className="ms-1">
-                        {(product.price / 100).toFixed(2)}
+                        {convertPrice(product.price)}
                       </span>
                     </p>
+                    {!layout && (
+                      <p
+                        className="text-truncate text-no-wrap phead-color pe-5 mb-0"
+                        style={{ width: "500px" }}
+                      >
+                        <span className="mt-4 mb-4">
+                          {product?.description}
+                        </span>
+                        <div>
+                          <Link
+                            className="nav-link rounded px-3 primary bgprimary d-inline-block"
+                            to={`{/products/${product?.id}`}
+                          >
+                            Details
+                          </Link>
+                        </div>
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
@@ -308,11 +376,7 @@ const Products = () => {
     </>
   );
 };
-
 export default Products;
-
-
-
 // const sortProducts = (products, type = "price", order = "asc") => {
 //   return [...products].sort((a, b) => {
 //     if (type === "price") {
@@ -335,7 +399,6 @@ export default Products;
 //     case 2:
 //       setProducts(sortProducts(products, "price", "asc"));
 //       break;
-
 //     case 3:
 //       setProducts(sortProducts(products, "name", "asc"));
 //       break;
@@ -346,7 +409,6 @@ export default Products;
 //       setProducts(data);
 //   }
 // }, [sortItem]);
-
 // useEffect(() => {
 //   switch (sortCompany) {
 //     case 1:
@@ -364,7 +426,6 @@ export default Products;
 //       setProducts(filteredProductsByliddy);
 //       setRecords(filteredProductsByliddy.length);
 //       break;
-
 //     case 3:
 //       const filteredProductsByikea = products.filter(
 //         (obj) => obj.company == "ikea"
@@ -379,24 +440,20 @@ export default Products;
 //       setProducts(filteredProductsBycaressa);
 //       setRecords(filteredProductsBycaressa.length);
 //       break;
-
 //     default:
 //       setProducts(products);
 //   }
 // }, [sortCompany]);
-
 // useEffect(() => {
 //   const filteredProductsByCatogories = products.filter(
 //     (obj) => obj.category == catogories
 //   );
 //   setProducts(filteredProductsByCatogories);
 // }, []);
-
 // const handleColor = (color) => {
 //   const filteredProductsByColor = products.filter((obj) =>
 //     obj.colors.some((clr) => clr.toLowerCase() === color.toLowerCase())
 //   );
-
 //   setProducts(filteredProductsByColor);
 //   setRecords(filteredProductsByColor.length);
 // };

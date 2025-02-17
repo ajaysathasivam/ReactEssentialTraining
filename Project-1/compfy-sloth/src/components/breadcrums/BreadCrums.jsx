@@ -1,9 +1,11 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./BreadCrums.scss";
 import Layout from "../layout/Layout";
 const BreadCrums = ({ current,className }) => {
   const navigate = useNavigate();
+  const location = useLocation()
+  console.log(location)
   return (
     <div className={`py-4  d-flex align-items-center bread-crum ${className}`}>
       <Layout>
@@ -11,7 +13,8 @@ const BreadCrums = ({ current,className }) => {
           {" "}
           <p className="fs-2 fw-bold bread-root" onClick={() => navigate("/")}>Home</p>
           <p className="fs-2 mx-2">/</p>
-          <p className="fs-2 fw-bold bread-child">{current}</p>
+          <p className="fs-2 fw-bold bread-child text-capitalize" >{current}</p>
+          <p className="fs-2 mx-2">/</p>
         </div>
       </Layout>
     </div>
