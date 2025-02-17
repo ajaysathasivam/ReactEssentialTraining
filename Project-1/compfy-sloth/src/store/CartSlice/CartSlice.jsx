@@ -10,10 +10,15 @@ export const cartSlice = createSlice({
             console.log(action.payload)
             const item = [...state.items, action.payload]
             state.items = item
-            localStorage.setItem("cart",JSON.stringify(item))
+            localStorage.setItem("cart", JSON.stringify(item))
+        },
+        setClerCart: (state, action) => {
+            state.items = []
+            localStorage.setItem('cart', JSON.stringify([])
+            )
         }
     }
 })
 
-export const { setCartValue } = cartSlice.actions
+export const { setCartValue, setClerCart } = cartSlice.actions
 export default cartSlice.reducer

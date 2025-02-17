@@ -17,7 +17,7 @@ const Products = () => {
   const [data, setData] = useState();
   const [products, setProducts] = useState(data || []);
   const [records, setRecords] = useState(products.length);
-  const [layout, setLayout] = useState(" col-md-6 col-lg-4");
+  const [layout, setLayout] = useState(false);
   const [sortItem, setSortItem] = useState(0);
   const [priceRange, setRange] = useState(0);
   const [sortCompany, setCompany] = useState(null);
@@ -59,7 +59,7 @@ const Products = () => {
       setRecords(data.length);
     },
   });
- 
+
   const handleClear = () => {
     setProducts(allProducts);
   };
@@ -73,7 +73,7 @@ const Products = () => {
   };
   const handleChange = (e, type) => {
     // const { value } = e.target;
-    let allNewValues = [...allProducts];
+    let allNewValues = [...productLists];
 
     switch (type) {
       case "name":
@@ -244,11 +244,11 @@ const Products = () => {
               <div className="col-lg-2 py-2  ">
                 <i
                   className="bi bi-grid-fill pointer bg-dark text-light fs-6 p-1  rounded-1  mx-1"
-                  onClick={() => setLayout(" col-md-6 col-lg-4")}
+                  onClick={() => setLayout(true)}
                 ></i>
                 <i
                   className="bi bi-list border pointer border-dark rounded-1 p-1  fs-6  "
-                  onClick={() => setLayout(" col-12")}
+                  onClick={() => setLayout(false)}
                 ></i>
               </div>
               <div className="col-lg-3 my-2">
@@ -276,35 +276,29 @@ const Products = () => {
             </div>
             <div className="row">
               {productLists?.map((product) => (
-                <div className={`${layout} col-12 `}>
-                  <Card className={"featured-card"}>
-                    <div className="">
-                      <div
-                        className={`${layout === "col-12" && "flow-column"}`}
-                        onClick={() => navigate(`/poster/${product.id}`)}
-                      >
-                        <div className="" style={{ height: "175px" }}>
-                          <img
-                            src={product?.image}
-                            className="w-100 h-100 object-fit-cover rounded"
-                            alt={product?.name}
-                          />
-                        </div>
+                <div
+                  className={layout ? "col-4  d-block" : "col-12 d-flex"}
+                  onClick={() => navigate(`/poster/${product.id}`)}
+                >
+                  <div className="" style={{ height: "175px" }}>
+                    <img
+                      src={product?.image}
+                      className="w-100 h-100 object-fit-cover rounded"
+                      alt={product?.name}
+                    />
+                  </div>
 
-                        <div className="d-flex justify-content-between my-2">
-                          <p className="chead-color text-capitalize">
-                            {product.name}
-                          </p>
-                          <p className="chead primary">
-                            $
-                            <span className="ms-1">
-                              {(product.price / 100).toFixed(2)}
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
+                  <div className="d-flex justify-content-between my-2">
+                    <p className="chead-color text-capitalize">
+                      {product.name}
+                    </p>
+                    <p className="chead primary">
+                      $
+                      <span className="ms-1">
+                        {(product.price / 100).toFixed(2)}
+                      </span>
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
