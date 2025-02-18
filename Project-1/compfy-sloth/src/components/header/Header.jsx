@@ -10,7 +10,6 @@ const Header = ({cartItem}) => {
   // console.log(cartItem)
   return (
     <Section sectionName={"header"}>
-      <header>
         <nav className="navbar  navbar-expand-lg ">
           <div className="container-fluid justify-content-between">
             <Link to="/">
@@ -69,7 +68,6 @@ const Header = ({cartItem}) => {
             </div>
           </div>
         </nav>
-      </header>
     </Section>
   );
 };

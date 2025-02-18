@@ -15,13 +15,13 @@ const CustomDesign = () => {
       <div className="row custom-row ">
         <div className="col-12 ">
           {customDesignDiscription?.map((obj) => (
-            <div className="row d-flex justify-content-between py-5 py-lg-5">
-              <div className="col-lg-6 pe-5">
-                <p className="h2 text-capitalize custom-card-heading">{obj.heading}</p>
-              </div>
-              <div className="col-lg-6">
-                <p className="custom-card-body lh-lg">{obj.discription}</p>
-              </div>
+            <div className=" row d-flex  justify-content-between mb-4">
+              <h3 className="fs-1  text-wrap   fw-bold text-capitalize custom-card-heading " style={{maxWidth:"300px"}}>
+                {obj.heading}
+              </h3>
+              <p className="col-12 col-lg-6 custom-card-body lh-lg">
+                {obj.discription}
+              </p>
             </div>
           ))}
         </div>

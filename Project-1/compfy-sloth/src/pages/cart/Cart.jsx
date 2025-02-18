@@ -9,7 +9,7 @@ import { convertPrice } from "../../utils/FilterData";
 
 const Cart = () => {
   const [cartItem, setCartItem] = useState(
-    JSON.parse(localStorage.getItem("cart"))
+    JSON.parse(localStorage.getItem("cart")) ||[]
   );
   const data = useSelector((state) => state.cart.items);
   const dispatch = useDispatch()
@@ -60,13 +60,13 @@ const Cart = () => {
 
   // Update total dynamically whenever cartItem changes
   useEffect(() => {
-    const newSubTotal = cartItem.reduce((acc, item) => acc + item.subTotal, 0);
+    const newSubTotal = cartItem?.reduce((acc, item) => acc + item.subTotal, 0);
     setSubTotal(newSubTotal);
     setTotal(newSubTotal + shippingFee);
   }, [cartItem]);
 
   const handleDel = (id) => {
-    const filteredCart = cartItem.filter((obj) => obj.id != id);
+    const filteredCart = cartItem?.filter((obj) => obj.id != id);
     setCartItem(filteredCart);
   };
   return (
@@ -74,7 +74,7 @@ const Cart = () => {
       <BreadCrums current={currentPath.pathname} />
 
       <Section>
-        {cartItem.length > 0 ?
+        {cartItem?.length > 0 ?
           <div className="row">
 
             {cartItem?.map((obj, idx) => (

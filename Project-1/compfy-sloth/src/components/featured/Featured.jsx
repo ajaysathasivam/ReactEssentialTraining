@@ -7,6 +7,7 @@ import { setValue } from "../../store/productsSlice/ProductsSlice";
 import { useNavigate } from "react-router-dom";
 import HoverSearch from "../hoverSearch/HoverSearch";
 import Button from "../button/Button";
+import {convertPrice} from "../../utils/FilterData"
 
 const Featured = () => {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ const Featured = () => {
   return (
     <Section sectionName={"featured"}>
       <div className="row">
-        <div className="col-12 text-center pb-5">
+        <div className="col-12 text-center pb-5 py-5">
           <p className="h2 chead  fw-bold featured-title">Featured Products</p>
         </div>
         {data?.map((product,idx,) => (
@@ -58,11 +59,13 @@ const Featured = () => {
           <Card className={"featured-card"}>
             <div className="col ">
               <div className="position-relative" style={{ height: "225px" }}>
-              <i  
-                  className="bi bi-search position-absolute featured-image opacity-0  primary fw-bold d-flex align-items-center justify-content-center  w-100 h-100 display-6"
+             <span className="position-absolute featured-image opacity-0  rounded  primary fw-bold d-flex align-items-center justify-content-center  w-100 h-100 display-6 p-2" >
+             <i  
+                  className="bi bi-search bgprimary rounded-circle fs-5  d-flex  justify-content-center align-items-center  fw-bolder" style={{width:"40px",height:"40px", fontWeight:"bolder"}}
                   onClick={() => navigate(`/poster/${product.id}`)}
                   
                 ></i>
+             </span>
                 <img
                   src={product.image}
                   className="w-100 h-100 object-fit-cover rounded "
@@ -73,7 +76,7 @@ const Featured = () => {
               <div className="d-flex justify-content-between my-2">
                 <p className="chead text-capitalize">{product.name}</p>
                 <p className="chead primary">
-                  $<span className="ms-1">{product.price}</span>
+                  $<span className="ms-1"> {convertPrice(product.price) }</span>
                 </p>
               </div>
             </div>

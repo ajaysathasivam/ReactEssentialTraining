@@ -11,10 +11,10 @@ const BreadCrums = ({ current,className }) => {
       <Layout>
         <div className="d-flex fw-bold">
           {" "}
-          <p className="fs-2 fw-bold bread-root" onClick={() => navigate("/")}>Home</p>
-          <p className="fs-2 mx-2">/</p>
-          <p className="fs-2 fw-bold bread-child text-capitalize" >{current}</p>
-          <p className="fs-2 mx-2">/</p>
+          <p className="fs-2 fw-bold bread-root lts " onClick={() => navigate("/")}>Home</p>
+          {/* <p className="fs-2 mx-2">/</p> */}
+          <p className="fs-2 fw-bold bread-child text-capitalize lts" >{current}</p>
+          {/* <p className="fs-2 mx-2">/</p> */}
         </div>
       </Layout>
     </div>

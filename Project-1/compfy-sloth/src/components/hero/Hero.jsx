@@ -3,16 +3,16 @@ import Button from "../button/Button";
 import { useNavigate } from "react-router-dom";
 import "../hero/Hero.scss";
 import Section from "../layout/Section";
-
+// import useWindowDimensions from "../../utils/windowDimension"
 const Hero = ({ heading, bodyContent }) => {
   const navigate = useNavigate();
-
+  // const {width} = useWindowDimensions();
   return (
     <Section>
-      <section className="hero-section" style={{height:"80vh"}}>
+      <section className="hero-section" style={{height:"100vh"}}>
         <div className="row h-100">
           <div className=" col-lg-7">
-            <p className=" text-capitalize chead fw-bold lh-1 w-75 display-4 ">
+            <p className=" text-capitalize chead fw-bold lh-1 w-75 display-4 mt-5 ">
               {heading}
             </p>
             <p className="lh-lg fs-5 me-5 py-4">{bodyContent}</p>
@@ -22,7 +22,7 @@ const Hero = ({ heading, bodyContent }) => {
               onClick={() => navigate("/products")}
             />
           </div>
-          <div className="col  h-100  ">
+         {1200<992?null: <div className="col  h-100  ">
             <div className="img-piller h-100 ">
               <img
                 src="https://react-course-comfy-sloth-store.netlify.app/static/media/hero-bcg.a876f19f6786a3aca992.jpeg"
@@ -39,7 +39,7 @@ const Hero = ({ heading, bodyContent }) => {
               </div>
             </div>
             
-          </div>
+          </div>}
         </div>
       </section>
     </Section>

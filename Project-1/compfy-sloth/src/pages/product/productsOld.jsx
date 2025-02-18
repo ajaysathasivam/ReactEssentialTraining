@@ -1,29 +1,46 @@
-import  { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import BreadCrums from "../../components/breadcrums/BreadCrums";
+import Layout from "../../components/layout/Layout";
+import { useDispatch, useSelector } from "react-redux";
 import Section from "../../components/layout/Section";
+import Card from "../../components/card/Card";
 import DropDown from "../../components/dropDown/DropDown";
 import { convertPrice, filterData } from "../../utils/FilterData";
+import { useFormik } from "formik";
 import "./Products.scss";
 import Button from "../../components/button/Button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { setValue } from "../../store/productsSlice/ProductsSlice";
+import useWindowDimensions from "../../utils/windowDimension";
 const Products = () => {
+  // const init= useSelector((state)=>state.products.value ||[])
+  const [data, setData] = useState();
+  const [products, setProducts] = useState(data || []);
   const [layout, setLayout] = useState(true);
   const [sortItem, setSortItem] = useState(0);
+  const [priceRange, setRange] = useState(0);
   const currentPath = useLocation();
+  const dispatch = useDispatch();
+  const [defaultColor, setdefColor] = useState("all");
   const [productLists, setProductLists] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
+  const [records, setRecords] = useState();
+  const [companyActive, setCompanyActive] = useState({default:"all",track:0});
+  const [defaultCatagory, setCatagory] = useState({default:"all",track:0});
+  const { width } = useWindowDimensions();
+  const [track, setTracker] = useState(0);
   const navigate = useNavigate();
+  const inputRef = useRef();
 
-
-  const [filters, setFilters] = useState({
+  
+  const initValue = {
     search: "",
-    category: "all",
-    company: "all",
-    shipping: false,
-    color: "all",
-    price: 0,
-  });
-
+    range: 0,
+    freeShiping: true,
+  };
+  console.log(allProducts);
+  console.log(defaultCatagory)
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,6 +50,7 @@ const Products = () => {
         const result = await response.json();
         setProductLists(result || []);
         setAllProducts(result || []);
+        setRecords(result.length);
       } catch (error) {
         if (error.name === "AbortError") {
           console.log("Request was aborted");
@@ -43,67 +61,112 @@ const Products = () => {
     };
     fetchData();
   }, []);
-
-
-  useEffect(() => {
-    let tempProduts = allProducts;
-    if (filters.search) {
-      tempProduts = tempProduts.filter((curr) =>
-        curr.name.toLowerCase().includes(filters.search.toLowerCase())
-      );
-    }
-    if (filters.category && filters.category.toLowerCase() !== "all") {
-      tempProduts = tempProduts.filter(
-        (curr) => curr.category === filters.category
-      );
-    }
-    if (filters.company && filters.company.toLowerCase() !== "all") {
-      tempProduts = tempProduts.filter(
-        (curr) => curr.company === filters.company
-      );
-    }
-    if (filters.shipping) {
-      tempProduts = tempProduts.filter(
-        (curr) => curr.shipping === filters.shipping
-      );
-    }
-    if (filters.color && filters.color !== "all") {
-      tempProduts = tempProduts.filter((curr) =>
-        curr.colors?.includes(filters?.color)
-      );
-    }
-    if (filters.price) {
-      tempProduts = tempProduts.filter((curr) => curr.price <= filters?.price);
-    }
-
-    setProductLists(tempProduts);
-  }, [filters, allProducts]);
-
-  const handleFilter = (name, value) => {
-    setFilters((pre) => ({
-      ...pre,
-      [name]: value,
-    }));
+  const formik = useFormik({
+    initialValues: initValue,
+    onSubmit: (values) => {
+      formik.setValues(initValue);
+      setProducts(data);
+      setRecords(data.length);
+    },
+  });
+  const handleClear = () => {
+    setProducts(allProducts);
   };
-
-  useEffect(() => {
-    const maxPriceRange = Math.max(
-      ...(allProducts?.map((curr) => curr.price) || [0])
+  const categoryFilter = (arr, type, obj) => {
+    const filteredItems = arr.filter(
+      (curr) =>
+        curr?.[obj].toLowerCase().replaceAll(" ", "") === type.toLowerCase()
     );
-    setFilters((pre) => ({
-      ...pre,
-      price: maxPriceRange,
-    }));
+    arr = type && type !== "all" ? [...filteredItems] : [...arr];
+    return arr;
+  };
+  const handleChange = (e, type) => {
+    let allNewValues = [...productLists];
+    switch (type) {
+      case "name":
+        const { value: textvalue } = e.target;
+        const filteredItems = allNewValues.filter((curr) =>
+          curr.name.toLowerCase().includes(textvalue.toLowerCase())
+        );
+        allNewValues = textvalue ? [...filteredItems] : [...allProducts];
+        break;
+      case "catogories":
+        const value = e.trim().replaceAll(" ", "").toLowerCase();
+        allNewValues = categoryFilter(allProducts, value, "category")
+        // if (defaultCatagory.track === 0) {
+          setCatagory((pre)=>({...pre,default:e}));
+        //   setProductLists( categoryFilter(allNewValues, value, "category"));
+        //   setCatagory((pre)=>({...pre,track:track+1}))
+        // } else {
+        //   const copyProductList = [...allProducts];
+        //   allNewValues = categoryFilter(copyProductList, value, "category");
+        // }
+       
+        break;
+      case "range":
+        const range = inputRef.current.value;
+        console.log(range);
+        const filteredRangeItems = allNewValues.filter(
+          (curr) => range > curr.price
+        );
+        allNewValues = filteredRangeItems;
+        break;
+      case "checkbox":
+        const shipping = formik.values.freeShiping;
+        if (shipping) {
+          const filteredProductsByCheckbox = allNewValues.filter(
+            (obj) => obj.shipping == shipping
+          );
+          allNewValues = filteredProductsByCheckbox;
+        }
+        break;
+      case "clr":
+        if (track === 0) {
+          // if (typeof e === "object") setdefColor("all")
+          // setdefColor(e);
+          console.log(allNewValues)
+          // allNewValues = allNewValues.filter((obj) =>
+          //   obj.colors.includes(e)
+          // );
+          setTracker((pre) => pre + 1);
+        } else {
+          alert(0)
+          const copyProductList = [...allProducts];
+          allNewValues = copyProductList.filter((obj) =>
+            obj.colors.includes(e)
+          );
+        }
+        
+        // if (typeof e === "object") {
+        //   setdefColor("all");
+        //   console.log(allNewValues);
+        // } else {
+        //   setdefColor(e);
+        //   const filteredClrItems = allNewValues.filter((obj) =>
+        //     obj.colors.includes(e)
+        //   );
+        //   allNewValues = filteredClrItems;
+        // }
 
-  }, [allProducts]);
-
-  const colors = [
-    "all",
-    ...new Set(allProducts?.flatMap((curr) => curr.colors) || []),
-  ];
-  const maxPriceRange = Math.max(
-    ...(allProducts?.map((curr) => curr.price) || [0])
-  );
+        break;
+      case "company":
+        setCompanyActive((pre)=>({...pre,default:e}));
+        
+        if (companyActive.track === 0) {
+          allNewValues = categoryFilter(allNewValues, e, type);
+          setCompanyActive(((pre) =>({...pre,track:track+1})));
+        } else {
+          const copyProductList = [...allProducts];
+          allNewValues = categoryFilter(copyProductList, e, type);
+        }
+        setCatagory((pre)=>({...pre,track:0}))
+        
+        break;
+      default:
+    }
+    setProductLists(allNewValues);
+    setRecords(allNewValues.length);
+  };
 
   return (
     <>
@@ -115,18 +178,18 @@ const Products = () => {
         <div className="row py-5 ">
           <div
             className="col-lg-2 filter-container position-sticky"
-            // style={
-            //   width > 992
-            //     ? { height: "70vh", maxHeight: "500px", top: "10px" }
-            //     : null
-            // }
+            style={
+              width > 992
+                ? { height: "70vh", maxHeight: "500px", top: "10px" }
+                : null
+            }
           >
-            <form>
+            <form onSubmit={formik.handleSubmit}>
               {filterData?.map((item) => (
                 <>
                   <input
                     type={item.input.type}
-                    onChange={(e) => handleFilter("search", e.target.value)}
+                    onChange={(e) => handleChange(e, "name")}
                     name={item.input.name}
                     placeholder="search"
                     className="border-0 input-search px-2 py-2 w-100 rounded"
@@ -135,17 +198,17 @@ const Products = () => {
                     <span className="chead-color my-2 text-capitalize fw-bold">
                       {item.catogories.title}
                     </span>
-                    {item.catogories.subCt.map((subCt, idx) => (
+                    {item.catogories.subCt.map((subCt) => (
                       <li
-                        key={idx}
                         className={`nav-item my-1 text-capitalize   phead-color pointer text-decoration-none
                           ${
-                            filters.category === subCt
+                            defaultCatagory?.default.toLowerCase() ===
+                            subCt.toLowerCase()
                               ? "text-decoration-underline"
                               : "null"
                           }`}
                         style={{ letterSpacing: "1.6px", fontSize: "0.9rem" }}
-                        onClick={() => handleFilter("category", subCt)}
+                        onClick={() => handleChange(subCt, "catogories")}
                       >
                         {subCt}
                       </li>
@@ -156,15 +219,14 @@ const Products = () => {
                       {item?.company?.title}
                     </p>
                     <ul className=" p-0 pt-2  ">
-                      {item?.company.comLst.map((company, idx) => (
+                      {item?.company.comLst.map((company) => (
                         <li
-                          key={idx}
                           className={`list-unstyled pointer pb-2 phead-color  text-capitalize ${
-                            filters.company === company
+                            companyActive?.default === company
                               ? "text-decoration-underline"
                               : "null"
                           }`}
-                          onClick={() => handleFilter("company", company)}
+                          onClick={() => handleChange(company, "company")}
                         >
                           {company}
                         </li>
@@ -177,34 +239,31 @@ const Products = () => {
                       {item.color.title}
                     </p>
                     <div className="d-flex align-items-center my-4">
-                      {!!colors?.length &&
-                        colors?.map((color, idx) =>
-                          color == "all" ? (
-                            <span
-                              key={idx}
-                              className="me-2 text-capitalize pointer phead-color text-decoration-underline"
-                              onClick={() => handleFilter("color", color)}
-                            >
-                              {color}
-                            </span>
-                          ) : (
-                            <span
-                              key={idx}
-                              style={{
-                                backgroundColor: color,
-                                width: "20px",
-                                height: "20px",
-                                opacity: "0.5",
-                              }}
-                              className="rounded-circle border-0 mx-1 pointer text-center "
-                              onClick={() => handleFilter("color", color)}
-                            >
-                              {filters?.color === color ? (
-                                <i className="bi bi-check fw-bold text-white opacity-1"></i>
-                              ) : null}
-                            </span>
-                          )
-                        )}
+                      {item.color.colors.map((color) =>
+                        color == "all" ? (
+                          <span
+                            className="me-2 text-capitalize pointer phead-color text-decoration-underline"
+                            onClick={() => handleChange(item.color, "clr")}
+                          >
+                            {color}
+                          </span>
+                        ) : (
+                          <span
+                            style={{
+                              backgroundColor: color,
+                              width: "20px",
+                              height: "20px",
+                              opacity: "0.5",
+                            }}
+                            className="rounded-circle border-0 mx-1 pointer text-center "
+                            onClick={() => handleChange(color, "clr")}
+                          >
+                            {defaultColor === color ? (
+                              <i className="bi bi-check fw-bold text-dark opacity-1"></i>
+                            ) : null}
+                          </span>
+                        )
+                      )}
                     </div>
                   </div>
                   <div>
@@ -213,37 +272,35 @@ const Products = () => {
                     </p>
                     <p className="p-0 m-0 phead-color my-2">
                       {" "}
-                      ${convertPrice(filters?.price)}
+                      ${convertPrice(formik.values.range)}
                     </p>
                     <input
-                      value={filters.price}
-                      type="range"
+                      type={item.range.type}
+                      min={item.range.min}
+                      value={formik.values.range}
+                      // value={0}?
+                      name="range"
+                      ref={inputRef}
                       onChange={(e) => {
-                        setFilters((pre) => ({
-                          ...pre,
-                          price: e.target.value,
-                        }))                    
+                        handleChange(e, "range"), formik.handleChange(e);
                       }}
-                      max={maxPriceRange || 0}
+                      max={Number(item.range.max)}
                     />
                   </div>
                   <div className="my-2">
-                    <label
-                      htmlFor="shipping"
-                      className="form-label chead-color me-5  "
-                    >
+                    <label htmlFor="" className="form-label chead-color me-5  ">
                       {item.checkbox.title}
                     </label>
                     <input
-                      id="shipping"
                       type={item.checkbox.type}
-                      checked={filters?.shipping}
+                      value={formik.values.freeShiping}
                       name="freeShiping"
                       onClick={(e) => {
-                        setFilters((pre) => ({
-                          ...pre,
-                          shipping: e.target.checked,
-                        }));
+                        handleChange(true, "checkbox"),
+                          formik.setValues({
+                            ...formik.values,
+                            freeShiping: !formik.values.freeShiping,
+                          });
                       }}
                       className="mx-2"
                     />
@@ -254,7 +311,7 @@ const Products = () => {
                 className="btn btn-danger my-2 mb-4  px-5"
                 text={"clear fillter"}
                 onClick={() => {
-                  setProductLists(allProducts);
+                  formik.handleReset, handleClear;
                 }}
               ></Button>
             </form>
@@ -277,7 +334,7 @@ const Products = () => {
               </div>
               <div className="col-lg-3 my-2">
                 <span className="phead-color fs-6">
-                  {productLists?.length ? `${productLists?.length} product found` : "0 product found"}
+                  {records ? `${records} product found` : "0 product found"}
                 </span>
               </div>
               <div className="col-12 col-lg-4">

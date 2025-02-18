@@ -10,11 +10,11 @@ import Cart from "../pages/cart/Cart";
 import Poster from "../pages/poster/Poster";
 import Button from "../components/button/Button";
 const RoutesCom = () => {
-  // const numberOfItems = JSON.parse(localStorage.getItem('cart')).length
+  const numberOfItems = JSON.parse(localStorage.getItem('cart'))?.length || 0
   return (
     <>
       <BrowserRouter>
-        <Header cartItem={2} />
+        <Header cartItem={numberOfItems} />
 
         <Routes>
           <Route path="/" element={<Home />} />
