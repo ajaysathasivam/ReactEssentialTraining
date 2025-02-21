@@ -14,7 +14,7 @@ const About = () => {
       <BreadCrums current={currentPath.pathname} />
       <Layout>
         <div className="row   py-5 ">
-          <div className={`col-lg-6 p-2 ${1200<=992?"my-5":"mx-5"}`} style={{ height: "500px" }}>
+          <div className={`col-lg-6 p-2 mb  mb-5 my-lg-0 me-5`} style={{ height: "500px" }}>
               <img
               src={aboutImage}
               alt=""
@@ -26,7 +26,7 @@ const About = () => {
               {aboutHeader}
             </h2>
 
-            <p className=" phead-color mt-5 lh-lg text-justify">{aboutBody}</p>
+            <p className=" phead-color mt-4  lh-lg text-justify">{aboutBody}</p>
           </div>
         </div>
       </Layout>

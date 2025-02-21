@@ -16,3 +16,18 @@
 }
 
 }
+.product-image:hover{
+    display: block;
+    background-color:rgba(0, 0, 0, 0.486);
+    position: relative;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1 !important;
+    
+};
+.hover:hover{
+    background-color:var(--clr-primary-5);
+    color: white;
+    border: 1px solid orange;
+    padding: 2px;
+
+}

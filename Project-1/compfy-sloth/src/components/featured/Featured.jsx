@@ -54,7 +54,7 @@ const Featured = () => {
           <p className="h2 chead  fw-bold featured-title">Featured Products</p>
         </div>
         {data?.map((product,idx,) => (
-          <div className=" col-md-6 col-lg-4  ">
+          <div className=" col-md-6 col-lg-4  " key={idx}>
             
           <Card className={"featured-card"}>
             <div className="col ">

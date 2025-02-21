@@ -16,6 +16,8 @@ Day-12/node_modules
 Day-14/node_modules
 Day-18/node_modules
 Project-1/node_modules
+quiz/node_modules
+ChatBox/node_modules
 
 Day7/dist
 Day-8/dist
@@ -26,6 +28,8 @@ Day-12/dist
 Day-14/dist
 Day-18/dist
 Project-1/dist
+quiz/dist
+ChatBox/dist
 
 Day7/dist-ssr
 Day-8/dist-ssr
@@ -36,6 +40,8 @@ Day-12/dist-ssr
 Day-14/dist-ssr
 Day-18/dist-ssr
 Project-1/dist-ssr
+quiz/dist-ssr
+ChatBox/dist-ssr
 *.local
 
 # Editor directories and files

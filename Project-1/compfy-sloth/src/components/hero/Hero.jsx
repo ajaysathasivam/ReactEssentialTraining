@@ -11,18 +11,18 @@ const Hero = ({ heading, bodyContent }) => {
     <Section>
       <section className="hero-section" style={{height:"100vh"}}>
         <div className="row h-100">
-          <div className=" col-lg-7">
+          <div className=" col-lg-7 mt-0 mt-lg-5">
             <p className=" text-capitalize chead fw-bold lh-1 w-75 display-4 mt-5 ">
               {heading}
             </p>
-            <p className="lh-lg fs-5 me-5 py-4">{bodyContent}</p>
+            <p className="lh-lg  me-5 py-4">{bodyContent}</p>
             <Button
               className="btn  primary bgprimary text-uppercase"
               text="shop now"
               onClick={() => navigate("/products")}
             />
           </div>
-         {1200<992?null: <div className="col  h-100  ">
+         <div className="col  h-100  d-none d-lg-block ">
             <div className="img-piller h-100 ">
               <img
                 src="https://react-course-comfy-sloth-store.netlify.app/static/media/hero-bcg.a876f19f6786a3aca992.jpeg"
@@ -39,7 +39,7 @@ const Hero = ({ heading, bodyContent }) => {
               </div>
             </div>
             
-          </div>}
+          </div>
         </div>
       </section>
     </Section>

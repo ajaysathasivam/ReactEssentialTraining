@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import BreadCrums from "../../components/breadcrums/BreadCrums";
 import Section from "../../components/layout/Section";
 import DropDown from "../../components/dropDown/DropDown";
@@ -6,14 +6,16 @@ import { convertPrice, filterData } from "../../utils/FilterData";
 import "./Products.scss";
 import Button from "../../components/button/Button";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import useWindowDimensions from "../../utils/windowDimension";
 const Products = () => {
   const [layout, setLayout] = useState(true);
   const [sortItem, setSortItem] = useState(0);
   const currentPath = useLocation();
   const [productLists, setProductLists] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
+  const [drop, setDrop] = useState(false);
   const navigate = useNavigate();
-
+  const { width } = useWindowDimensions();
 
   const [filters, setFilters] = useState({
     search: "",
@@ -22,6 +24,7 @@ const Products = () => {
     shipping: false,
     color: "all",
     price: 0,
+    sort: "",
   });
 
   useEffect(() => {
@@ -43,7 +46,6 @@ const Products = () => {
     };
     fetchData();
   }, []);
-
 
   useEffect(() => {
     let tempProduts = allProducts;
@@ -75,6 +77,28 @@ const Products = () => {
     if (filters.price) {
       tempProduts = tempProduts.filter((curr) => curr.price <= filters?.price);
     }
+    if (filters.sort) {
+      const temp = [...tempProduts];
+
+      if (filters.sort === " a-z") {
+        temp.sort((a, b) =>
+          a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        );
+      }
+      if (filters.sort === "z-a") {
+        temp.sort((a, b) =>
+          b.name.toLowerCase().localeCompare(a.name.toLowerCase())
+        );
+      }
+
+      if (filters.sort === "highest") {
+        temp.sort((a, b) => b.price - a.price);
+      }
+      if (filters.sort === "lowest") {
+        temp.sort((a, b) => a.price - b.price);
+      }
+      tempProduts = [...temp];
+    }
 
     setProductLists(tempProduts);
   }, [filters, allProducts]);
@@ -94,7 +118,6 @@ const Products = () => {
       ...pre,
       price: maxPriceRange,
     }));
-
   }, [allProducts]);
 
   const colors = [
@@ -115,13 +138,13 @@ const Products = () => {
         <div className="row py-5 ">
           <div
             className="col-lg-2 filter-container position-sticky"
-            // style={
-            //   width > 992
-            //     ? { height: "70vh", maxHeight: "500px", top: "10px" }
-            //     : null
-            // }
+            style={
+              width > 992
+                ? { height: "100vh", maxHeight: "100%", top: "10px" }
+                : null
+            }
           >
-            <form>
+            <form style={{ fontSize: "12px" }}>
               {filterData?.map((item) => (
                 <>
                   <input
@@ -129,7 +152,7 @@ const Products = () => {
                     onChange={(e) => handleFilter("search", e.target.value)}
                     name={item.input.name}
                     placeholder="search"
-                    className="border-0 input-search px-2 py-2 w-100 rounded"
+                    className="border-0 input-search px-2 w-100 rounded"
                   />
                   <ul className="navbar-nav">
                     <span className="chead-color my-2 text-capitalize fw-bold">
@@ -144,39 +167,48 @@ const Products = () => {
                               ? "text-decoration-underline"
                               : "null"
                           }`}
-                        style={{ letterSpacing: "1.6px", fontSize: "0.9rem" }}
+                        style={{ letterSpacing: "1.6px", fontSize: "12px" }}
                         onClick={() => handleFilter("category", subCt)}
                       >
                         {subCt}
                       </li>
                     ))}
                   </ul>
-                  <div>
+                  <div className="positon-relative ">
                     <p className="p-0 m-0 chead-color fw-bold mt-4 text-capitalize">
                       {item?.company?.title}
                     </p>
-                    <ul className=" p-0 pt-2  ">
-                      {item?.company.comLst.map((company, idx) => (
-                        <li
-                          key={idx}
-                          className={`list-unstyled pointer pb-2 phead-color  text-capitalize ${
-                            filters.company === company
-                              ? "text-decoration-underline"
-                              : "null"
-                          }`}
-                          onClick={() => handleFilter("company", company)}
-                        >
-                          {company}
-                        </li>
-                      ))}
-                    </ul>
+                    <span
+                      className=""
+                      onClick={() => setDrop((pre) => !pre)}
+                    >
+                     <span className=" bg-light phead-color">All <i className="bi bi-caret-down-fill"></i></span>
+                      <ul className=" p-0 pt-2 position-absolute top-1 z-3 w-50 bg-light border-1   ">
+                        {item?.company.comLst.map((company, idx) => (
+                          <li
+                            key={idx}
+                            className={`${
+                              drop ? "d-block" : "d-none"
+                            }  list-unstyled pointer  phead-color hover ps-1 text-capitalize ${
+                              filters.company === company
+                                ? "text-decoration-underline"
+                                : "null"
+                            }`}
+                            onClick={() => handleFilter("company", company)}
+                            style={{ letterSpacing: "1.6px", fontSize: "12px" }}
+                          >
+                            {company}
+                          </li>
+                        ))}
+                      </ul>
+                    </span>
                   </div>
                   {/* {color} */}
                   <div>
-                    <p className="p-0 m-0  chead-color fw-bold mt-3 text-capitalize">
+                    <p className="p-0 m-0 fs-6 chead-color fw-bold mt-3 text-capitalize">
                       {item.color.title}
                     </p>
-                    <div className="d-flex align-items-center my-4">
+                    <div className="d-flex align-items-center ">
                       {!!colors?.length &&
                         colors?.map((color, idx) =>
                           color == "all" ? (
@@ -208,7 +240,7 @@ const Products = () => {
                     </div>
                   </div>
                   <div>
-                    <p className="p-0 m-0 chead-color fw-bold mt-3 text-capitalize">
+                    <p className="p-0 m-0 fs-6 chead-color fw-bold mt-3 text-capitalize">
                       {item.range.title}
                     </p>
                     <p className="p-0 m-0 phead-color my-2">
@@ -222,7 +254,7 @@ const Products = () => {
                         setFilters((pre) => ({
                           ...pre,
                           price: e.target.value,
-                        }))                    
+                        }));
                       }}
                       max={maxPriceRange || 0}
                     />
@@ -277,7 +309,9 @@ const Products = () => {
               </div>
               <div className="col-lg-3 my-2">
                 <span className="phead-color fs-6">
-                  {productLists?.length ? `${productLists?.length} product found` : "0 product found"}
+                  {productLists?.length
+                    ? `${productLists?.length} product found`
+                    : "0 product found"}
                 </span>
               </div>
               <div className="col-12 col-lg-4">
@@ -287,32 +321,39 @@ const Products = () => {
                 <div className="  align-item-center w-50">sort by</div>
                 <div className=" bg-gray w-75">
                   <DropDown
-                    list={[
-                      "price-(highest)",
-                      "price-(lowest)",
-                      "price-(a-z)",
-                      "price-(z-a)",
-                    ]}
-                    setSortItem={setSortItem}
+                    list={["highest", "lowest", "a-z", "z-a"]}
+                    setFilters={setFilters}
                   />
                 </div>
               </div>
             </div>
             <div className="row gy-4 ">
-              {productLists?.map((product) => (
+              {productLists?.map((product, idx) => (
                 <div
+                  key={idx}
                   className={
                     layout ? " col-md-6 col-lg-4   d-block" : "col-12 d-flex"
                   }
-                  onClick={() => navigate(`/poster/${product.id}`)}
                 >
                   <div
-                    className=""
+                    className="position-relative pointer"
                     style={{
                       height: "175px",
                       width: `${!layout ? "45%" : "auto"}`,
                     }}
+                    // onClick={() => navigate(`/poster/${product.id}`)}
                   >
+                    <span className="position-absolute product-image opacity-0  rounded  primary fw-bold d-flex align-items-center justify-content-center  w-100 h-100 display-6 p-2">
+                      <i
+                        className="bi bi-search bgprimary rounded-circle fs-5  d-flex  justify-content-center align-items-center  fw-bolder"
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                          fontWeight: "bolder",
+                        }}
+                        onClick={() => navigate(`/poster/${product.id}`)}
+                      ></i>
+                    </span>
                     <img
                       src={product?.image}
                       className="w-100 h-100 object-fit-cover rounded"

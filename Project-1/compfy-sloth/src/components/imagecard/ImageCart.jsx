@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-const ImageCart = ({image,state}) => {
+const ImageCart = ({image,state,maxHeight}) => {
     // const [state,setState] = useState()
   return (
-    <div className="col">
+    <div className=" pointer" style={{Height:"500px"}}>
       {" "}
-      <img src={image} onClick={()=>state(image)} className="w-100 h-100 rounded" alt="" />
+      <img src={image}  onClick={()=>state(image)} className="w-100 h-100 rounded" alt="" />
     </div>
   );
 };
